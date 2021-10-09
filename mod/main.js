@@ -1,7 +1,7 @@
 Game.registerMod("cc-rp",{
 	init:function()
 	{
-		var ws = new WebSocket("ws://localhost:6969/update");
+		let ws = new WebSocket("ws://localhost:6969/update");
 
 		ws.onopen = function (event) {
             Game.registerHook('check', function() {
@@ -13,13 +13,45 @@ Game.registerMod("cc-rp",{
 
 function getScale(index)
 {
+	//shout out cookie monster mod
+
 	longScale = [
+		'',
+		'',
+		'Million',
+		'Billion',
+		'Trillion',
+		'Quadrillion',
+		'Quintillion',
+		'Sextillion',
+		'Septillion',
+		'Octillion',
+		'Nonillion',
+		'Decillion',
+		'Undecillion',
+		'Duodecillion',
+		'Tredecillion',
+		'Quattuordecillion',
+		'Quindecillion',
+		'Sexdecillion',
+		'Septendecillion',
+		'Octodecillion',
+		'Novemdecillion',
+		'Vigintillion',
+		'Unvigintillion',
+		'Duovigintillion',
+		'Trevigintillion',
+		'Quattuorvigintillion',
+	];
+
+	//TODO make option to toggle between both scales
+	shortScale = [
 	  '',
 	  '',
 	  'M',
 	  'B',
 	  'Tr',
-	  'Quadr',
+	  'Quadri',
 	  'Quint',
 	  'Sext',
 	  'Sept',
