@@ -7,13 +7,13 @@ public class Endpoint
 {
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("Opened a connection.");
+        Main.getLogger().info("Opened a connection.");
     }
 
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("Closed connection.");
+        Main.getLogger().info("Closed connection.");
     }
 
     @OnMessage
@@ -23,11 +23,11 @@ public class Endpoint
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
 
-        Main.updateRichPresence(c.getCookies(), c.getCPS());
+        Main.updateRichPresence(c.getCookies(), c.getCPS(), c.getPrestigeLevel());
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        // Do error handling here
+        // TODO: Do error handling here
     }
 }

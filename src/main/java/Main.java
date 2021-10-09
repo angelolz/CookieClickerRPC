@@ -58,13 +58,13 @@ public class Main
         DiscordRPC.discordUpdatePresence(rp);
     }
 
-    public static void updateRichPresence(String cookies, String cps)
+    public static void updateRichPresence(String cookies, String cps, String ascension)
     {
         DiscordRichPresence rp = new DiscordRichPresence
             .Builder(cps + " per second")
             .setDetails(cookies + " cookies")
             .setStartTimestamps(startTime)
-            .setBigImage("cookie", "")
+            .setBigImage("cookie", "Ascension Lv. " + ascension)
             .build();
 
         DiscordRPC.discordUpdatePresence(rp);

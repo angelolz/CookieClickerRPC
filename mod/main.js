@@ -5,8 +5,7 @@ Game.registerMod("cc-rp",{
 
 		ws.onopen = function (event) {
             Game.registerHook('check', function() {
-				document.title = "[Angelolz Mod] " + nFormat(Game.cookies) + " cookies | " + nFormat(Game.cookiesPsRaw) + " CPS - Cookie Clicker";
-				ws.send('{"cookies": "' + nFormat(Game.cookies) + '","cps": "' + nFormat(Game.cookiesPsRaw) + '"}');
+				ws.send(`{"cookies": "${nFormat(Game.cookies)}","cps":"${nFormat(Game.cookiesPsRaw)}","prestige_lvl":"${Game.prestige.toString()}"}`);
 			});
         };
 	}
@@ -14,7 +13,7 @@ Game.registerMod("cc-rp",{
 
 function getScale(index)
 {
-	shortScale = [
+	longScale = [
 	  '',
 	  '',
 	  'M',
@@ -43,7 +42,7 @@ function getScale(index)
 	  'Quattuorvigint',
 	];
 
-	return shortScale[index];
+	return longScale[index];
 }
 
 function nFormat(num)
