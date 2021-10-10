@@ -1,8 +1,8 @@
 {
-	"Name": "Time Elapsed Mod",
-	"ID": "cc-rp",
+	"Name": "Discord Rich Presence",
+	"ID": "cc-rpc",
 	"Author": "Angelolz",
-	"Description": "Helper mod for creating Rich Presence Status for this game.",
+	"Description": "Adds rich presence for Cookie Clicker.",
 	"ModVersion": 1.0,
 	"GameVersion": 2.031,
 	"Date": "06/10/2021",
