@@ -20,7 +20,7 @@ public class Main
 
         logger.info("Starting Discord rich presence...");
         DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
-            .setReadyEventHandler((user) -> logger.info("Welcome, {}#{}!", user.username, user.discriminator))
+            .setReadyEventHandler((user) -> logger.info("Welcome, {}#{}! Started Discord Rich Presence Instance.", user.username, user.discriminator))
             .build();
         DiscordRPC.discordInitialize("895895624891895828", handlers, true);
 
@@ -32,11 +32,20 @@ public class Main
         logger.info("Starting websocket server...");
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(6969);
-        tomcat.addWebapp("/", new File("src/main/resources/").getAbsolutePath());
+
+        //if i'm running this in my IDE
+        if(new File("src/main/resources/").exists())
+            tomcat.addWebapp("", new File("src/main/resources/").getAbsolutePath());
+
+        //if i'm running this in a jar file
+        else
+        {
+            tomcat.addWebapp("", new File(".").getAbsolutePath());
+        }
+
         tomcat.start();
         tomcat.getServer().await();
         logger.info("Websocket server started.");
-
     }
 
     public static Logger getLogger() { return logger; }
@@ -51,7 +60,6 @@ public class Main
     {
         DiscordRichPresence rp = new DiscordRichPresence
             .Builder("Just started playing")
-            .setStartTimestamps(startTime)
             .setBigImage("cookie", "")
             .build();
 
@@ -68,5 +76,10 @@ public class Main
             .build();
 
         DiscordRPC.discordUpdatePresence(rp);
+    }
+
+    public static void setStartTime(long startTime)
+    {
+        Main.startTime = startTime;
     }
 }

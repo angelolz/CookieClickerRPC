@@ -1,4 +1,6 @@
 import com.google.gson.Gson;
+import net.arikia.dev.drpc.DiscordRPC;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
@@ -6,18 +8,24 @@ import javax.websocket.server.ServerEndpoint;
 public class Endpoint
 {
     @OnOpen
-    public void onOpen(Session session) {
+    public void onOpen(Session session)
+    {
         Main.getLogger().info("Opened a connection.");
+        Main.setStartTime(System.currentTimeMillis());
     }
 
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session)
+    {
         Main.getLogger().info("Closed connection.");
+        DiscordRPC.discordClearPresence();
+        Main.setStartTime(System.currentTimeMillis());
     }
 
     @OnMessage
-    public void onMessage(String text) {
+    public void onMessage(String text)
+    {
         Main.getLogger().debug("message:" + text);
 
         Gson gson = new Gson();
