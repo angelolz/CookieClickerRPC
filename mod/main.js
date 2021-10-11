@@ -115,15 +115,18 @@ function lostConnection()
 
 function reconnect()
 {
-	ws = new WebSocket("ws://localhost:6969/update");
+	if(!wsCon)
+	{
+		ws = new WebSocket("ws://localhost:6969/update");
 
-	ws.onopen = function(event) {
-		console.log("[cc-rpc] Reconnected to websocket!")
-		wsCon = true;
-		Game.Notify("Reconnected to Rich Presence Server!", "", [4,5], 6, false);
-		Game.removeHook('check', reconnect);
-		Game.registerHook('check', sendData);
+		ws.onopen = function(event) {
+			console.log("[cc-rpc] Reconnected to websocket!")
+			wsCon = true;
+			Game.Notify("Reconnected to Rich Presence Server!", "", [4,5], 6, false);
+			Game.removeHook('check', reconnect);
+			Game.registerHook('check', sendData);
+		}
+
+		ws.onclose = function (event) {if(wsCon) { lostConnection(); }}
 	}
-
-	ws.onclose = function (event) {if(wsCon) { lostConnection(); }}
 }
