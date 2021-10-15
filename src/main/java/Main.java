@@ -1,21 +1,21 @@
-import net.arikia.dev.drpc.DiscordEventHandlers;
-import net.arikia.dev.drpc.DiscordRPC;
-import net.arikia.dev.drpc.DiscordRichPresence;
-import org.apache.catalina.startup.Tomcat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
+import java.net.InetSocketAddress;
 import java.text.NumberFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import net.arikia.dev.drpc.DiscordEventHandlers;
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
+import org.java_websocket.server.WebSocketServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main
 {
     private static Logger logger;
     private static long startTime;
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
         logger = LoggerFactory.getLogger(Main.class);
 
@@ -30,23 +30,8 @@ public class Main
         startTime = System.currentTimeMillis();
         logger.info("Discord rich presence created.");
 
-        logger.info("Starting websocket server...");
-        Tomcat tomcat = new Tomcat();
-        tomcat.setPort(6969);
-
-        //if i'm running this in my IDE
-        if(new File("src/main/resources/").exists())
-            tomcat.addWebapp("", new File("src/main/resources/").getAbsolutePath());
-
-        //if i'm running this in a jar file
-        else
-        {
-            tomcat.addWebapp("", new File(".").getAbsolutePath());
-        }
-
-        tomcat.start();
-        tomcat.getServer().await();
-        logger.info("Websocket server started.");
+        WebSocketServer server = new Server(new InetSocketAddress("localhost", 6969));
+        server.run();
     }
 
     public static Logger getLogger() { return logger; }
