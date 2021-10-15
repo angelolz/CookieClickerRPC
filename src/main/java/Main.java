@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -76,7 +77,7 @@ public class Main
         if(Integer.parseInt(level) == 0)
             rp.setBigImage("icon", "");
         else
-            rp.setBigImage("icon", String.format("Prestige Lv. %s with %s ascends", level, resets));
+            rp.setBigImage("icon", String.format("Prestige Lv. %s with %s ascends", formatNum(level), resets));
 
         if(!season.isEmpty())
         {
@@ -95,5 +96,12 @@ public class Main
     public static void setStartTime(long startTime)
     {
         Main.startTime = startTime;
+    }
+
+    private static String formatNum(String num)
+    {
+        NumberFormat fmt = NumberFormat.getInstance();
+        fmt.setGroupingUsed(true);
+        return fmt.format(Long.parseLong(num));
     }
 }
