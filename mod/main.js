@@ -144,12 +144,12 @@ function getDrops(season)
 	switch(season)
 	{
 		case "halloween":
-			return `${Game.GetHowManyHalloweenDrops()}/${Game.halloweenDrops.length} halloween cookies`;
+			return `${Game.GetHowManyHalloweenDrops()}/${Game.halloweenDrops.length} cookies`;
 		case "christmas":
 			return `${Game.GetHowManySantaDrops()}/${Game.santaDrops.length} gifts
 				and ${Game.GetHowManyReindeerDrops()}/${Game.reindeerDrops.length} cookies`;
 		case "valentines":
-			return `${Game.GetHowManyHeartDrops()}/${Game.heartDrops.length} heart biscuits`;
+			return `${Game.GetHowManyHeartDrops()}/${Game.heartDrops.length} biscuits`;
 		case "easter":
 			return `${Game.GetHowManyEggs()}/${Game.easterEggs.length} eggs`;
 		case "fools":
