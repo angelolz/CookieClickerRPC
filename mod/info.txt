@@ -1,6 +1,6 @@
 {
 	"Name": "Discord Rich Presence",
-	"ID": "cc-rpc",
+	"ID": "ccrpc",
 	"Author": "Angelolz",
 	"Description": "Adds rich presence for Cookie Clicker.",
 	"ModVersion": 1.0,

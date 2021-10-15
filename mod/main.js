@@ -1,10 +1,20 @@
 /*jshint esversion: 6 */
 
+//websocket vars
 let ws, wsCon;
 
-Game.registerMod("cc-rpc",{
+//config vars
+let ascendLongScale, cookiesLongScale, elapsedTime;
+
+Game.registerMod("cc rpc",{
 	init:function()
 	{
+		//get preferenes
+		ascendLongScale = localStorageGet("ascendLongScale") == null ? true : false;
+		cookiesLongScale = localStorageGet("cookiesLongScale") == null ? false : true;
+		elapsedTime = localStorageGet("elapsedTime") == null ? false : true;
+
+		//setup websocket server
 		ws = new WebSocket("ws://localhost:6969/update");
 
 		ws.onopen = function (event) {
@@ -20,10 +30,70 @@ Game.registerMod("cc-rpc",{
 			Game.Notify("Couldn't connect to Rich Presence Server!", "Please check if the app is open.", [1,7]);
 			Game.registerHook('check', reconnect);
 		}
+
+		//setup menu
+		this.setupMenu();
+	},
+
+	setupMenu: function()
+	{
+		const gameMenu = Game.UpdateMenu;
+		const MOD = this;
+		Game.UpdateMenu = function ()
+		{
+			gameMenu();
+			if(Game.onMenu == 'prefs')
+			{
+				let menuHTML = l('menu').innerHTML;
+
+				menuHTML = menuHTML.replace(
+					'<div style="height:128px;"></div>',
+					'<div class="framed" style="margin:4px 48px;">' +
+						'<div class="block" style="padding:0px;margin:8px 4px;">' +
+							'<div class="subsection" style="padding:0px;">' +
+								MOD.modMenu() +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div style="height:128px;"></div>'
+				);
+
+				menu.innerHTML = menuHTML;
+			}
+		}
+	},
+
+	modMenu: function()
+	{
+		return (
+			'<div class="title">Rich Presence Settings</div>' +
+			`<div class="listing">
+				${this.button("ascendLongScale", "Long Scale for Ascension Info",
+					"Change the scale for your Prestige Level and number of Ascends.")}
+				<br>
+				${this.button("cookiesLongScale", "Short Scale for Cookie Info",
+					"Change the scale for your Cookies in Bank and Cookies per Second.")}
+				<br>
+				${this.button("elapsedTime", "Elapsed Time ON",
+					"Show how long you've been playing this session on your Rich Presence Status.")}
+			</div>`
+		);
+	},
+
+	button: function (id, text, label)
+	{
+		return(`<a class="smallFancyButton option on" id="${id}" ${loc(Game.clickStr)}="MOD.changeOption(${id})">${text}</a>` +
+			   `<label>${label}</label>`);
+	},
+
+	changeOption: function(option)
+	{
+
 	}
 });
 
-function getScale(index)
+// HELPER FUNCTIONS
+function getScale(index, useLong)
 {
 	//thank you cookie monster mod <3
 
@@ -85,7 +155,7 @@ function getScale(index)
 		'Quattuorvigint',
 	];
 
-	return longScale[index];
+	return useLong ? longScale[index] : shortScale[index];
 }
 
 function nFormat(num)
@@ -99,6 +169,27 @@ function nFormat(num)
 	return answer;
 }
 
+function getDrops(season)
+{
+	switch(season)
+	{
+		case "halloween":
+			return `${Game.GetHowManyHalloweenDrops()}/${Game.halloweenDrops.length} cookies`;
+		case "christmas":
+			return `${Game.GetHowManySantaDrops()}/${Game.santaDrops.length} gifts
+				and ${Game.GetHowManyReindeerDrops()}/${Game.reindeerDrops.length} cookies`;
+		case "valentines":
+			return `${Game.GetHowManyHeartDrops()}/${Game.heartDrops.length} biscuits`;
+		case "easter":
+			return `${Game.GetHowManyEggs()}/${Game.easterEggs.length} eggs`;
+		case "fools":
+			return "69/420 c00kiez";
+		default:
+			return 0;
+	}
+}
+
+// WEBSOCKET FUNCTIONS
 function sendData()
 {
 	ws.send(
@@ -136,25 +227,5 @@ function reconnect()
 		}
 
 		ws.onclose = function (event) {if(wsCon) { lostConnection(); }}
-	}
-}
-
-function getDrops(season)
-{
-	switch(season)
-	{
-		case "halloween":
-			return `${Game.GetHowManyHalloweenDrops()}/${Game.halloweenDrops.length} cookies`;
-		case "christmas":
-			return `${Game.GetHowManySantaDrops()}/${Game.santaDrops.length} gifts
-				and ${Game.GetHowManyReindeerDrops()}/${Game.reindeerDrops.length} cookies`;
-		case "valentines":
-			return `${Game.GetHowManyHeartDrops()}/${Game.heartDrops.length} biscuits`;
-		case "easter":
-			return `${Game.GetHowManyEggs()}/${Game.easterEggs.length} eggs`;
-		case "fools":
-			return "69/420 cookeis";
-		default:
-			return 0;
 	}
 }

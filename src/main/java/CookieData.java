@@ -1,5 +1,12 @@
 public class CookieData
 {
+    public class Config
+    {
+        boolean ascend_long_scale;
+        boolean cookies_long_scale;
+        boolean elapsed_time;
+    }
+
     private String cookies;
     private String cps;
     private String prestige_lvl;
