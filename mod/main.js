@@ -17,7 +17,7 @@ Game.registerMod("cc-rpc",{
 		ws.onclose = function (event) {if(wsCon) { lostConnection(); }}
 
 		ws.onerror = function (event) {
-			Game.Notify("Couldn't connect to Rich Presence Server!", "Please check if the app is open.", [1,7], 6, false);
+			Game.Notify("Couldn't connect to Rich Presence Server!", "Please check if the app is open.", [1,7]);
 			Game.registerHook('check', reconnect);
 		}
 	}
@@ -56,7 +56,6 @@ function getScale(index)
 		'Quattuorvigintillion',
 	];
 
-	//TODO make option to toggle between both scales
 	shortScale = [
 		'',
 		'',
@@ -91,7 +90,8 @@ function getScale(index)
 
 function nFormat(num)
 {
-	let answer = '';
+	//ty again cookie monster mod :DDDD
+	let answer;
 	const exponential = num.toExponential().toString();
 	const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
 	answer = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
@@ -101,14 +101,22 @@ function nFormat(num)
 
 function sendData()
 {
-	ws.send(`{"cookies": "${nFormat(Game.cookies)}","cps":"${nFormat(Game.cookiesPsRaw)}","prestige_lvl":"${Game.prestige.toString()}"}`);
+	ws.send(
+		`{
+			"cookies": "${nFormat(Game.cookies)}",
+			"cps":"${nFormat(Game.cookiesPsRaw)}",
+			"prestige_lvl":"${Game.prestige.toString()}",
+			"resets":"${Game.resets.toString()}",
+			"season":"${Game.season}",
+			"drops":"${getDrops(Game.season)}"
+		}`);
 }
 
 function lostConnection()
 {
 	console.log("[cc-rpc] Lost connection to websocket and reconnecting...")
 	wsCon = false; ws = null;
-	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7], 6, false);
+	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7);
 	Game.removeHook('check', sendData);
 	Game.registerHook('check', reconnect);
 }
@@ -128,5 +136,25 @@ function reconnect()
 		}
 
 		ws.onclose = function (event) {if(wsCon) { lostConnection(); }}
+	}
+}
+
+function getDrops(season)
+{
+	switch(season)
+	{
+		case "halloween":
+			return `${Game.GetHowManyHalloweenDrops()}/${Game.halloweenDrops.length} halloween cookies`;
+		case "christmas":
+			return `${Game.GetHowManySantaDrops()}/${Game.santaDrops.length} gifts
+				and ${Game.GetHowManyReindeerDrops()}/${Game.reindeerDrops.length} cookies`;
+		case "valentines":
+			return `${Game.GetHowManyHeartDrops()}/${Game.heartDrops.length} heart biscuits`;
+		case "easter":
+			return `${Game.GetHowManyEggs()}/${Game.easterEggs.length} eggs`;
+		case "fools":
+			return "69/420 cookeis";
+		default:
+			return 0;
 	}
 }

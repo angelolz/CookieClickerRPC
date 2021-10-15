@@ -5,7 +5,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -66,16 +66,26 @@ public class Main
         DiscordRPC.discordUpdatePresence(rp);
     }
 
-    public static void updateRichPresence(String cookies, String cps, String ascension)
+    public static void updateRichPresence(String cookies, String cps, String level, String resets, String season, String drops)
     {
-        DiscordRichPresence rp = new DiscordRichPresence
+        DiscordRichPresence.Builder rp = new DiscordRichPresence
             .Builder(cps + " per second")
             .setDetails(cookies + " cookies")
             .setStartTimestamps(startTime)
-            .setBigImage("cookie", "Ascension Lv. " + ascension)
-            .build();
+            .setBigImage("cookie", String.format("Prestige Lv. %s with %s ascends", level, resets));
 
-        DiscordRPC.discordUpdatePresence(rp);
+        if(!season.isEmpty())
+        {
+            String icon;
+            if(season.equals("April Fool's!"))
+                icon = "fools";
+            else
+                icon = season.toLowerCase();
+
+            rp.setSmallImage(icon, String.format("Season: %s | %s", season, drops));
+        }
+
+        DiscordRPC.discordUpdatePresence(rp.build());
     }
 
     public static void setStartTime(long startTime)

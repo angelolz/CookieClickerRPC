@@ -18,7 +18,7 @@ public class Endpoint
     @OnClose
     public void onClose(Session session)
     {
-        Main.getLogger().info("Closed connection.");
+        Main.getLogger().info("Closed connection and stopped Rich Presence status.");
         DiscordRPC.discordClearPresence();
         Main.setStartTime(System.currentTimeMillis());
     }
@@ -31,11 +31,15 @@ public class Endpoint
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
 
-        Main.updateRichPresence(c.getCookies(), c.getCPS(), c.getPrestigeLevel());
+        Main.updateRichPresence(
+            c.getCookies(), c.getCPS(), c.getPrestigeLevel(),
+            c.getResets(), c.getSeason(), c.getDrops()
+        );
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable) {
-        // TODO: Do error handling here
+    public void onError(Session session, Throwable throwable)
+    {
+        Main.getLogger().error("ERROR: {}:{}", throwable.getClass().getName(), throwable.getMessage());
     }
 }
