@@ -60,7 +60,7 @@ public class Main
     {
         DiscordRichPresence rp = new DiscordRichPresence
             .Builder("Just started playing")
-            .setBigImage("cookie", "")
+            .setBigImage("icon", "")
             .build();
 
         DiscordRPC.discordUpdatePresence(rp);
@@ -71,8 +71,12 @@ public class Main
         DiscordRichPresence.Builder rp = new DiscordRichPresence
             .Builder(cps + " per second")
             .setDetails(cookies + " cookies")
-            .setStartTimestamps(startTime)
-            .setBigImage("cookie", String.format("Prestige Lv. %s with %s ascends", level, resets));
+            .setStartTimestamps(startTime);
+
+        if(Integer.parseInt(level) == 0)
+            rp.setBigImage("icon", "");
+        else
+            rp.setBigImage("icon", String.format("Prestige Lv. %s with %s ascends", level, resets));
 
         if(!season.isEmpty())
         {
@@ -82,7 +86,7 @@ public class Main
             else
                 icon = season.toLowerCase();
 
-            rp.setSmallImage(icon, String.format("Season: %s | %s", season, drops));
+            rp.setSmallImage(icon, String.format("%s | %s", season, drops));
         }
 
         DiscordRPC.discordUpdatePresence(rp.build());

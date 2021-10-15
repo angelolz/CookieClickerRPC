@@ -116,7 +116,7 @@ function lostConnection()
 {
 	console.log("[cc-rpc] Lost connection to websocket and reconnecting...")
 	wsCon = false; ws = null;
-	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7);
+	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7]);
 	Game.removeHook('check', sendData);
 	Game.registerHook('check', reconnect);
 }
