@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 8 */
 
 if(RPC === undefined) var RPC = {};
 if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieClicker/CCSE.js');
@@ -7,15 +7,14 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 RPC.name = "Discord Rich Presence";
 RPC.id = "cc-rpc"
 RPC.author = "Angelolz";
-RPC.version = "1.0";
+RPC.version = "v1.0";
 RPC.gameVersion = "2.042";
 
 RPC.launch = function()
 {
-
 	RPC.defaultConfig = function() {
 		return {
-			ASCEND_LONG_SCALE: 1,
+			PRESTIGE_LONG_SCALE: 1,
 			COOKIES_LONG_SCALE: 0,
 			SHOW_ELAPSED_TIME: 1
 		}
@@ -23,17 +22,58 @@ RPC.launch = function()
 
 	RPC.init = function() {
 		RPC.isLoaded = 1;
-		// RPC.replaceGameMenu();
+		RPC.replaceGameMenu();
 		RPC.setupWebSocket();
 		// RPC.checkUpdate(); TODO enable this
 	}
 
 	RPC.config = RPC.defaultConfig();
 
-	// RPC.getMenuString = function()
-	// {
-	// 	let m = CCSE.MenuHelper;
-	// }
+	RPC.replaceGameMenu = function()
+	{
+		Game.customOptionsMenu.push(function()
+		{
+			CCSE.AppendCollapsibleOptionsMenu(RPC.name, RPC.getMenuString());
+		});
+
+		Game.customStatsMenu.push(function()
+		{
+			CCSE.AppendStatsVersionNumber(RPC.name, RPC.version);
+		});
+	}
+
+	RPC.getMenuString = function()
+	{
+		let m = CCSE.MenuHelper;
+		str =
+			'<div class="listing">' +
+			m.ToggleButton(RPC.config, 'PRESTIGE_LONG_SCALE', "RPC_PRESTIGE_LONG_SCALE", "Long Scale for Prestige Level", "Short Scale for Prestige Level", "RPC.toggle") +
+			'<label>Change the scale setting for the Ascenion information.</label><br>' +
+			m.ToggleButton(RPC.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "RPC.toggle") +
+			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
+			m.ToggleButton(RPC.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "RPC.toggle") +
+			'<label>Toggle display for how long you\'ve been playing this session.</label>' +
+			'</div>';
+
+		return str;
+	}
+
+	RPC.toggle = function(name, button, on, off, invert)
+	{
+		if(RPC.config[name])
+		{
+			l(button).innerHTML = off;
+			RPC.config[name] = 0;
+		}
+
+		else
+		{
+			l(button).innerHTML = on;
+			RPC.config[name] = 1;
+		}
+
+		l(button).className = 'option' + ((RPC.config[name] ^ invert) ? '' : ' off');
+	}
 
 	RPC.setupWebSocket = function ()
 	{
@@ -73,14 +113,14 @@ RPC.launch = function()
 		var res = await fetch("https://api.github.com/repos/angelolz1/CookieClickerRPC/releases/latest");
 		var json = await res.json();
 
-		if(json.tag_name != CookieAssistant.version)
+		if(json.tag_name != RPC.version)
 		{
 			//TODO notify that there's a new version and provide download link
 		}
 	}
 
-	// HELPER FUNCTIONS
-	function getScale(index, useLong)
+	// helper functions
+	RPC.getScale = function(index, useLong)
 	{
 		//thank you cookie monster mod <3
 
@@ -145,18 +185,18 @@ RPC.launch = function()
 		return useLong ? longScale[index] : shortScale[index];
 	}
 
-	function nFormat(num)
+	RPC.nFormat = function(num, useLong)
 	{
 		//ty again cookie monster mod :DDDD
-		let answer;
+		let val;
 		const exponential = num.toExponential().toString();
 		const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
-		answer = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
-		answer += " " + getScale(AmountOfTenPowerThree);
-		return answer;
+		val = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
+		val += " " + RPC.getScale(AmountOfTenPowerThree, useLong);
+		return val;
 	}
 
-	function getDrops(season)
+	RPC.getDrops = function(season)
 	{
 		switch(season)
 		{
@@ -176,54 +216,12 @@ RPC.launch = function()
 		}
 	}
 
-	// WEBSOCKET FUNCTIONS
-	function sendData()
-	{
-		ws.send(
-			`{
-			"cookies": "${nFormat(Game.cookies)}",
-			"cps":"${nFormat(Game.cookiesPsRaw)}",
-			"prestige_lvl":"${Game.prestige.toString()}",
-			"resets":"${Game.resets.toString()}",
-			"season":"${Game.season}",
-			"drops":"${getDrops(Game.season)}"
-		}`);
-	}
-
-	function lostConnection()
-	{
-		console.log("[cc-rpc] Lost connection to websocket and reconnecting...")
-		wsCon = false; ws = null;
-		Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7]);
-		Game.removeHook('check', sendData);
-		Game.registerHook('check', reconnect);
-	}
-
-	function reconnect() {
-		if (!wsCon) {
-			ws = new WebSocket("ws://localhost:6969/update");
-
-			ws.onopen = function (event) {
-				console.log("[cc-rpc] Reconnected to websocket!")
-				wsCon = true;
-				Game.Notify("Reconnected to Rich Presence Server!", "", [4, 5], 6, false);
-				Game.removeHook('check', reconnect);
-				Game.registerHook('check', sendData);
-			}
-
-			ws.onclose = function (event) {
-				if (wsCon) {
-					lostConnection();
-				}
-			}
-		}
-	}
-
+	//INIT MOD
 	if(CCSE.ConfirmGameVersion(RPC.id, RPC.version, RPC.gameVersion))
 	{
 		Game.registerMod(RPC.id, RPC);
 	}
-}
+};
 
 if(!RPC.isLoaded)
 {
@@ -237,5 +235,58 @@ if(!RPC.isLoaded)
 		if(!CCSE) var CCSE = {};
 		if(!CCSE.postLoadHooks) CCSE.postLoadHooks = [];
 		CCSE.postLoadHooks.push(RPC.launch);
+	}
+}
+
+// websocket functions
+function sendData()
+{
+	RPC.ws.send(
+		`{
+				"cookies": "${RPC.nFormat(Game.cookies, RPC.config["COOKIES_LONG_SCALE"])}",
+				"cps":"${RPC.nFormat(Game.cookiesPsRaw, RPC.config["COOKIES_LONG_SCALE"])}",
+				"prestige_lvl":"${RPC.nFormat(Game.prestige, RPC.config["PRESTIGE_LONG_SCALE"])}",
+				"resets":"${Game.resets.toString()}",
+				"season":"${Game.season}",
+				"drops":"${RPC.getDrops(Game.season)}",
+				"config": {
+					PRESTIGE_LONG_SCALE: ${RPC.config.PRESTIGE_LONG_SCALE},
+					cookies_long_scale: ${RPC.config.COOKIES_LONG_SCALE},
+					elapsed_time: ${RPC.config.SHOW_ELAPSED_TIME}
+			}
+		}`);
+}
+
+function lostConnection()
+{
+	console.log("[cc-rpc] Lost connection to websocket and reconnecting...")
+	RPC.wsCon = false;
+	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7]);
+	Game.removeHook('check', sendData);
+	Game.registerHook('check', reconnect);
+}
+
+function reconnect()
+{
+	if (!RPC.wsCon)
+	{
+		RPC.ws = new WebSocket("ws://localhost:6969");
+
+		RPC.ws.onopen = function (event)
+		{
+			console.log("[cc-rpc] Reconnected to websocket!")
+			RPC.wsCon = true;
+			Game.Notify("Reconnected to Rich Presence Server!", "", [4, 5], 6, false);
+			Game.removeHook('check', reconnect);
+			Game.registerHook('check', sendData);
+		}
+
+		RPC.ws.onclose = function (event)
+		{
+			if (RPC.wsCon)
+			{
+				lostConnection();
+			}
+		}
 	}
 }

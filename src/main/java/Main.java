@@ -52,27 +52,31 @@ public class Main
         DiscordRPC.discordUpdatePresence(rp);
     }
 
-    public static void updateRichPresence(String cookies, String cps, String level, String resets, String season, String drops)
+    public static void updateRichPresence(CookieData c)
     {
         DiscordRichPresence.Builder rp = new DiscordRichPresence
-            .Builder(cps + " per second")
-            .setDetails(cookies + " cookies")
-            .setStartTimestamps(startTime);
+            .Builder(c.getCPS() + " per second")
+            .setDetails(c.getCookies() + " cookies");
 
-        if(Integer.parseInt(level) == 0)
+        if(c.getConfig().showElapsedTime())
+        {
+            rp.setStartTimestamps(startTime);
+        }
+
+        if(c.getPrestigeLevel().equals("0"))
             rp.setBigImage("icon", "");
         else
-            rp.setBigImage("icon", String.format("Prestige Lv. %s with %s ascends", formatNum(level), resets));
+            rp.setBigImage("icon", String.format("Prestige Lv. %s with %s ascends", c.getPrestigeLevel(), c.getResets()));
 
-        if(!season.isEmpty())
+        if(!c.getSeason().isEmpty())
         {
             String icon;
-            if(season.equals("April Fool's!"))
+            if(c.getSeason().equals("April Fool's!"))
                 icon = "fools";
             else
-                icon = season.toLowerCase();
+                icon = c.getSeason().toLowerCase();
 
-            rp.setSmallImage(icon, String.format("%s | %s", season, drops));
+            rp.setSmallImage(icon, String.format("%s | %s", c.getSeason(), c.getDrops()));
         }
 
         DiscordRPC.discordUpdatePresence(rp.build());
@@ -81,12 +85,5 @@ public class Main
     public static void setStartTime(long startTime)
     {
         Main.startTime = startTime;
-    }
-
-    private static String formatNum(String num)
-    {
-        NumberFormat fmt = NumberFormat.getInstance();
-        fmt.setGroupingUsed(true);
-        return fmt.format(Long.parseLong(num));
     }
 }

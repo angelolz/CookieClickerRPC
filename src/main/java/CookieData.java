@@ -2,9 +2,24 @@ public class CookieData
 {
     public class Config
     {
-        boolean ascend_long_scale;
-        boolean cookies_long_scale;
-        boolean elapsed_time;
+        int prestige_long_scale;
+        int cookies_long_scale;
+        int elapsed_time;
+
+        public boolean useAscendLongScale()
+        {
+            return prestige_long_scale == 1 ? true : false;
+        }
+
+        public boolean useCookiesLongScale()
+        {
+            return cookies_long_scale == 1 ? true : false;
+        }
+
+        public boolean showElapsedTime()
+        {
+            return elapsed_time == 1 ? true : false;
+        }
     }
 
     private String cookies;
@@ -13,6 +28,7 @@ public class CookieData
     private String resets;
     private String season;
     private String drops;
+    private Config config;
 
     public String getCookies() { return cookies; }
     public String getCPS() { return cps; }
@@ -27,4 +43,5 @@ public class CookieData
     }
 
     public String getDrops() { return drops; }
+    public Config getConfig() { return config; }
 }
