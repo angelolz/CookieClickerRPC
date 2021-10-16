@@ -4,36 +4,24 @@ public class CookieData
     {
         int prestige_long_scale;
         int cookies_long_scale;
-        int elapsed_time;
-
-        public boolean useAscendLongScale()
-        {
-            return prestige_long_scale == 1 ? true : false;
-        }
-
-        public boolean useCookiesLongScale()
-        {
-            return cookies_long_scale == 1 ? true : false;
-        }
+        int show_elapsed_time;
+        int small_icon_mode;
 
         public boolean showElapsedTime()
         {
-            return elapsed_time == 1 ? true : false;
+            return show_elapsed_time == 1 ? true : false;
         }
+
+        public int smallIconMode() { return small_icon_mode; }
     }
 
-    private String cookies;
-    private String cps;
-    private String prestige_lvl;
-    private String resets;
-    private String season;
-    private String drops;
+    String cookies, cps;
+    String prestige_lvl, resets;
+    String season, drops;
+    String lumps, lump_status;
+    String clicks, cookies_per_click;
     private Config config;
 
-    public String getCookies() { return cookies; }
-    public String getCPS() { return cps; }
-    public String getPrestigeLevel() { return prestige_lvl; }
-    public String getResets() { return resets; }
     public String getSeason()
     {
         if(season.equals("fools"))
@@ -42,6 +30,5 @@ public class CookieData
             return season.substring(0, 1).toUpperCase() + season.substring(1);
     }
 
-    public String getDrops() { return drops; }
     public Config getConfig() { return config; }
 }

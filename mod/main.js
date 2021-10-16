@@ -5,22 +5,25 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 
 //mod info
 RPC.name = "Discord Rich Presence";
-RPC.id = "cc-rpc"
+RPC.id = "cc-rpc";
 RPC.author = "Angelolz";
-RPC.version = "v1.0";
+RPC.version = "v0.1";
 RPC.gameVersion = "2.042";
 
 RPC.launch = function()
 {
-	RPC.defaultConfig = function() {
+	RPC.defaultConfig = function()
+	{
 		return {
 			PRESTIGE_LONG_SCALE: 1,
 			COOKIES_LONG_SCALE: 0,
-			SHOW_ELAPSED_TIME: 1
+			SHOW_ELAPSED_TIME: 1,
+			SMALL_ICON_MODE: 0
 		}
 	}
 
-	RPC.init = function() {
+	RPC.init = function()
+	{
 		RPC.isLoaded = 1;
 		RPC.replaceGameMenu();
 		RPC.setupWebSocket();
@@ -52,7 +55,9 @@ RPC.launch = function()
 			m.ToggleButton(RPC.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "RPC.toggle") +
 			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
 			m.ToggleButton(RPC.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "RPC.toggle") +
-			'<label>Toggle display for how long you\'ve been playing this session.</label>' +
+			'<label>Toggle display for how long you\'ve been playing this session.</label><br>' +
+			m.ActionButton("RPC.config.SMALL_ICON_MODE == 3 ? RPC.config.SMALL_ICON_MODE = 0 : RPC.config.SMALL_ICON_MODE++; Game.UpdateMenu();", RPC.smallIconSettingText(RPC.config.SMALL_ICON_MODE)) +
+			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label>' +
 			'</div>';
 
 		return str;
@@ -81,7 +86,7 @@ RPC.launch = function()
 
 		RPC.ws.onopen = function (event)
 		{
-			console.log("[cc-rpc] established connection to websocket")
+			console.log("[cc-rpc] established connection to websocket!")
 			RPC.wsCon = true;
 			Game.registerHook('check', sendData);
 			Game.Notify("Started Rich Presence Server!", "", [5,5], 6, false);
@@ -104,7 +109,6 @@ RPC.launch = function()
 	RPC.load = function(str)
 	{
 		RPC.config = JSON.parse(str);
-		//maybe do some other things?
 	}
 
 	RPC.checkUpdate = async function ()
@@ -188,10 +192,20 @@ RPC.launch = function()
 	{
 		//ty again cookie monster mod :DDDD
 		let val;
-		const exponential = num.toExponential().toString();
-		const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
-		val = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
-		val += " " + RPC.getScale(AmountOfTenPowerThree, useLong);
+
+		if(num < 1000000)
+		{
+			val = num.toLocaleString("en-US");
+		}
+
+		else
+		{
+			const exponential = num.toExponential().toString();
+			const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
+			val = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
+			val += " " + RPC.getScale(AmountOfTenPowerThree, useLong);
+		}
+
 		return val;
 	}
 
@@ -212,6 +226,38 @@ RPC.launch = function()
 				return "69/420 c00kiez";
 			default:
 				return 0;
+		}
+	}
+
+	RPC.smallIconSettingText = function(mode)
+	{
+		switch(mode)
+		{
+			case 0:
+				return "Show Current Season Info";
+			case 1:
+				return "Show Sugar Lump Info";
+			case 2:
+				return "Show Clicks Info";
+			case 3:
+				return "Don't Show Any Info";
+		}
+	}
+
+	RPC.lumpType = function(type)
+	{
+		switch(type)
+		{
+			case 0:
+				return "normal";
+			case 1:
+				return "bifurcated";
+			case 2:
+				return "golden";
+			case 3:
+				return "meaty";
+			case 4:
+				return "caramelized";
 		}
 	}
 
@@ -242,16 +288,21 @@ function sendData()
 {
 	RPC.ws.send(
 		`{
-				"cookies": "${RPC.nFormat(Game.cookies, RPC.config["COOKIES_LONG_SCALE"])}",
-				"cps":"${RPC.nFormat(Game.cookiesPsRaw, RPC.config["COOKIES_LONG_SCALE"])}",
-				"prestige_lvl":"${RPC.nFormat(Game.prestige, RPC.config["PRESTIGE_LONG_SCALE"])}",
-				"resets":"${Game.resets.toString()}",
-				"season":"${Game.season}",
-				"drops":"${RPC.getDrops(Game.season)}",
-				"config": {
-					PRESTIGE_LONG_SCALE: ${RPC.config.PRESTIGE_LONG_SCALE},
-					cookies_long_scale: ${RPC.config.COOKIES_LONG_SCALE},
-					elapsed_time: ${RPC.config.SHOW_ELAPSED_TIME}
+			"cookies": "${RPC.nFormat(Game.cookies, RPC.config.COOKIES_LONG_SCALE)}",
+			"cps":"${RPC.nFormat(Game.cookiesPsRaw, RPC.config.COOKIES_LONG_SCALE)}",
+			"prestige_lvl":"${RPC.nFormat(Game.prestige, RPC.config.PRESTIGE_LONG_SCALE)}",
+			"resets":"${Game.resets.toString()}",
+			"season":"${Game.season}",
+			"drops":"${RPC.getDrops(Game.season)}",
+			"lumps":"${Game.lumps}",
+			"lump_status":"${RPC.lumpType(Game.lumpCurrentType)}",
+			"clicks":"${RPC.nFormat(Game.cookieClicks)}",
+			"cookies_per_click":"${RPC.nFormat(Game.computedMouseCps)}",
+			"config": {
+				prestige_long_scale: ${RPC.config.PRESTIGE_LONG_SCALE},
+				cookies_long_scale: ${RPC.config.COOKIES_LONG_SCALE},
+				show_elapsed_time: ${RPC.config.SHOW_ELAPSED_TIME},
+				small_icon_mode: ${RPC.config.SMALL_ICON_MODE}
 			}
 		}`);
 }

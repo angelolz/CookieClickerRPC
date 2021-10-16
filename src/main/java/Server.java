@@ -32,7 +32,7 @@ public class Server extends WebSocketServer
     @Override
     public void onMessage(WebSocket conn, String text)
     {
-        Main.getLogger().debug("message:" + text);
+        Main.getLogger().debug("message:\n" + text);
 
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
