@@ -17,7 +17,12 @@ This Cookie Clicker mod will allow you to share your game stats with everyone on
 6) You should be able to see your rich presence shown on Discord!
 
 ## Installation (Browser)
-Soon! Still working on adding support for it!
+Copy this code and save it as a bookmark.
+```
+javascript: (function () {   Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
+```
+
+On your Cookie Clicker game, click the bookmark you created. If it asks you if you're sure that you want to load the mod, click **Yes**. *The only reason why it asks this is because the mod is based on the steam version, which is (currently) v1.042. This should still work on the current version that the browser is on now.* 
 
 # Bugs/Feedback
 There are times where I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)! 
