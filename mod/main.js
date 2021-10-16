@@ -24,7 +24,7 @@ RPC.launch = function()
 		RPC.isLoaded = 1;
 		RPC.replaceGameMenu();
 		RPC.setupWebSocket();
-		// RPC.checkUpdate(); TODO enable this
+		RPC.checkUpdate();
 	}
 
 	RPC.config = RPC.defaultConfig();
@@ -44,7 +44,7 @@ RPC.launch = function()
 
 	RPC.getMenuString = function()
 	{
-		let m = CCSE.MenuHelper;
+		let m = CCSE.MenuHelper, str;
 		str =
 			'<div class="listing">' +
 			m.ToggleButton(RPC.config, 'PRESTIGE_LONG_SCALE', "RPC_PRESTIGE_LONG_SCALE", "Long Scale for Prestige Level", "Short Scale for Prestige Level", "RPC.toggle") +
@@ -109,13 +109,12 @@ RPC.launch = function()
 
 	RPC.checkUpdate = async function ()
 	{
-		//TODO change URL
 		var res = await fetch("https://api.github.com/repos/angelolz1/CookieClickerRPC/releases/latest");
 		var json = await res.json();
 
 		if(json.tag_name != RPC.version)
 		{
-			//TODO notify that there's a new version and provide download link
+			Game.Notify("New update to Rich Presence!", `<a ${Game.clickStr}="Steam.openLink('https://github.com/angelolz1/CookieClickerRPC/releases')">Click here</a> to download it!`, [16,5]);
 		}
 	}
 
