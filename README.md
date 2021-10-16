@@ -6,7 +6,7 @@ This Cookie Clicker mod will allow you to share your game stats with everyone on
 - CCSE
 - The Rich Presence Cookie Clicker mod
 - The Rich Presence Java Client
-- Java 11 (?)
+- Java 8 or higher
 
 ## Installation (Steam)
 1) Download CCSE [here](https://klattmose.github.io/CookieClicker/SteamMods/CCSE.zip?v=2.031) and add it to your mods folder (inside the local folder preferably).
