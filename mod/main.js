@@ -326,7 +326,7 @@ function reconnect()
 		{
 			console.log("[cc-rpc] Reconnected to websocket!")
 			RPC.wsCon = true;
-			Game.Notify("Reconnected to Rich Presence Server!", "", [4, 5], 6, false);
+			Game.Notify("Reconnected to Rich Presence Server!", "", [4, 5]);
 			Game.removeHook('check', reconnect);
 			Game.registerHook('check', sendData);
 		}

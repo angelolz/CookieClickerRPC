@@ -24,10 +24,16 @@ public class CookieData
 
     public String getSeason()
     {
-        if(season.equals("fools"))
-            return "April Fool's!";
+        if(!season.isEmpty())
+        {
+            if(season.equals("fools"))
+                return "April Fool's!";
+            else
+                return season.substring(0, 1).toUpperCase() + season.substring(1);
+        }
+
         else
-            return season.substring(0, 1).toUpperCase() + season.substring(1);
+            return "";
     }
 
     public Config getConfig() { return config; }
