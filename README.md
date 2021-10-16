@@ -18,7 +18,7 @@ This Cookie Clicker mod will allow you to share your game stats with everyone on
 
 ## Installation (Browser)
 Copy this code and save it as a bookmark.
-```
+```javascript
 javascript: (function () {   Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
 ```
 
