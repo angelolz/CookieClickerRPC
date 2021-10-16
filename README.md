@@ -24,6 +24,9 @@ javascript: (function () {   Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.
 
 On your Cookie Clicker game, click the bookmark you created. If it asks you if you're sure that you want to load the mod, click **Yes**. *The only reason why it asks this is because the mod is based on the steam version, which is (currently) v1.042. This should still work on the current version that the browser is on now.* 
 
+# :warning: Warning! :warning: 
+**Don't** run this mod on both the Steam version and browser version, the Rich Presence Status will try to update its status from both games, which will look weird!
+
 # Bugs/Feedback
 There are times where I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)! 
 
