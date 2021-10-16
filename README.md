@@ -8,10 +8,10 @@ This Cookie Clicker mod will allow you to share your game stats with everyone on
 - Java 8 or higher
 
 ## Mod Installation (Steam) (Windows only)
-1) Download CCSE [here](https://klattmose.github.io/CookieClicker/SteamMods/CCSE.zip?v=2.031) and add it to your mods folder (inside either the local or workshop folder).
+1) Download CCSE [here](https://klattmose.github.io/CookieClicker/SteamMods/CCSE.zip?v=2.031) and add it to your mods folder (inside either the local or workshop folder).  
    ![Put CCSE in your mods folder](https://i.imgur.com/nIweduY.png)
    
-2) Download the mod for Cookie Clicker [here](https://www.google.com/). Put it in the same folder as CCSE.
+2) Download the mod for Cookie Clicker [here](https://www.google.com/). Put it in the same folder as CCSE.  
    ![Put the Cookie Clicker Rich Presence mod in the same folder](https://i.imgur.com/8xljqfU.png)
    
 3) In Cookie Clicker, enable both **CCSE** and **Discord Rich Presence** then click **Restart with new changes**.  
