@@ -54,3 +54,5 @@ MIT
 
 ---
 Cookie Clicker and its icons are owned by Orteil. Thank you Orteil for creating such an amazing game! 
+
+If you want to support me for my work, feel free to give me a [Ko-Fi](https://ko-fi.com/angelolz)!
