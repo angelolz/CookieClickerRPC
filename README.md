@@ -30,7 +30,7 @@ On your Cookie Clicker game, click the bookmark you created. If it asks you if y
 ### Windows
 - Just launch the executable program that was in the zip file.
 
-## macOS / Linux
+### macOS / Linux
 - Open a terminal and navigate to the `app` folder.
 - Type the command: `java -jar *.jar`.
 
