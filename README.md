@@ -2,22 +2,43 @@
 This Cookie Clicker mod will allow you to share your game stats with everyone on Discord!
 
 ## Requirements
-- Windows (macOS and Linux support soon, maybe?)
 - CCSE
 - The Rich Presence Cookie Clicker mod
 - The Rich Presence Java Client
-- Java 11 (?)
+- Java 8 or higher
 
-## Installation (Steam)
-1) Download CCSE [here](https://klattmose.github.io/CookieClicker/SteamMods/CCSE.zip?v=2.031) and add it to your mods folder (inside the local folder preferably).
-2) Download the mod for Cookie Clicker [here](https://www.google.com/). Put it in the same folder as CCSE.
-3) Download the Rich Presence application [here](https://www.google.com/). Put it somewhere easily accessible.
-4) Launch the application first, before enabling the mod. Upon opening the application, you should see your own Discord name and tag.
-5) Enable both **CCSE** and the **Discord Rich Presence** mods. *Note: if you are using Cookie Monster, make sure to load both aforementioned mods before Cookie Monster!*
-6) You should be able to see your rich presence shown on Discord!
+## Mod Installation (Steam) (Windows only)
+1) Download CCSE [here](https://klattmose.github.io/CookieClicker/SteamMods/CCSE.zip?v=2.031) and add it to your mods folder (inside either the local or workshop folder).  
+   ![Put CCSE in your mods folder](https://i.imgur.com/nIweduY.png)
+   
+2) Download the mod for Cookie Clicker [here](https://github.com/angelolz1/CookieClickerRPC/releases). Put it in the same folder as CCSE.  
+   ![Put the Cookie Clicker Rich Presence mod in the same folder](https://i.imgur.com/8xljqfU.png)
+   
+3) In Cookie Clicker, enable both **CCSE** and **Discord Rich Presence** then click **Restart with new changes**.  
+   *Note: if you're using Cookie Monster, make sure to prioritize it after those two mods.*
+   ![Enable both mods!](https://i.imgur.com/MPEgYTJ.png)
+   
+## Installation (Browser) (All Platforms)
+Copy this code and save it as a bookmark.
+```javascript
+javascript: (function () {   Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
+```
 
-## Installation (Browser)
-Soon! Still working on adding support for it!
+On your Cookie Clicker game, click the bookmark you created. If it asks you if you're sure that you want to load the mod, click **Yes**. *The only reason why it asks this is because the mod is based on the steam version, which is (currently) v1.042. This should still work on the current version that the browser is on now.* 
+
+## Enabling Rich Presence
+### Windows
+- Just launch the executable program that was in the zip file.
+
+### macOS / Linux
+- Open a terminal and navigate to the `app` folder.
+- Type the command: `java -jar *.jar`.
+
+If everything was installed correctly, you should see the below output and your rich presence on Discord!
+![It's working! :D](https://i.imgur.com/JAIsMk4.png)
+
+# :warning: Warning! :warning: 
+**Don't** run this mod on both the Steam version and browser version, the Rich Presence Status will try to update its status from both games, which will look weird!
 
 # Bugs/Feedback
 There are times where I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)! 
@@ -33,3 +54,5 @@ MIT
 
 ---
 Cookie Clicker and its icons are owned by Orteil. Thank you Orteil for creating such an amazing game! 
+
+If you want to support me for my work, feel free to give me a [Ko-Fi](https://ko-fi.com/angelolz)!
