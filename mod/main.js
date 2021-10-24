@@ -18,7 +18,7 @@ RPC.launch = function()
 			PRESTIGE_LONG_SCALE: 1,
 			COOKIES_LONG_SCALE: 0,
 			SHOW_ELAPSED_TIME: 1,
-			SMALL_ICON_MODE: 0
+			SMALL_ICON_MODE: 2
 		}
 	}
 
@@ -56,7 +56,7 @@ RPC.launch = function()
 			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
 			m.ToggleButton(RPC.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "RPC.toggle") +
 			'<label>Toggle display for how long you\'ve been playing this session.</label><br>' +
-			m.ActionButton("RPC.config.SMALL_ICON_MODE == 3 ? RPC.config.SMALL_ICON_MODE = 0 : RPC.config.SMALL_ICON_MODE++; Game.UpdateMenu();", RPC.smallIconSettingText(RPC.config.SMALL_ICON_MODE)) +
+			m.ActionButton("RPC.config.SMALL_ICON_MODE == 5 ? RPC.config.SMALL_ICON_MODE = 0 : RPC.config.SMALL_ICON_MODE++; Game.UpdateMenu();", RPC.smallIconSettingText(RPC.config.SMALL_ICON_MODE)) +
 			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label>' +
 			'</div>';
 
@@ -90,7 +90,7 @@ RPC.launch = function()
 			RPC.wsCon = true;
 			Game.registerHook('check', sendData);
 			Game.Notify("Started Rich Presence Server!", "", [5,5], 6, false);
-		};
+		}
 
 		RPC.ws.onclose = function (event) {if(RPC.wsCon) { lostConnection(); }}
 
@@ -234,13 +234,17 @@ RPC.launch = function()
 		switch(mode)
 		{
 			case 0:
-				return "Show Current Season Info";
+				return "Show Prestige Info";
 			case 1:
 				return "Show Sugar Lump Info";
 			case 2:
 				return "Show Clicks Info";
 			case 3:
-				return "Don't Show Any Info";
+				return "Show Golden Cookie Info";
+			case 4:
+				return "Show Current Season Info"
+			case 5:
+				return "Don't Show Any Info"
 		}
 	}
 
@@ -262,7 +266,7 @@ RPC.launch = function()
 	}
 
 	//INIT MOD
-	if(CCSE.ConfirmGameVersion(RPC.id, RPC.version, RPC.gameVersion))
+	if(CCSE.ConfirmGameVersion(RPC.name, RPC.version, RPC.gameVersion))
 	{
 		Game.registerMod(RPC.id, RPC);
 	}
@@ -288,16 +292,19 @@ function sendData()
 {
 	RPC.ws.send(
 		`{
+			"version": "${RPC.version}",
 			"cookies": "${RPC.nFormat(Game.cookies, RPC.config.COOKIES_LONG_SCALE)}",
-			"cps":"${RPC.nFormat(Game.cookiesPsRaw, RPC.config.COOKIES_LONG_SCALE)}",
+			"cps":"${RPC.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), RPC.config.COOKIES_LONG_SCALE)}",
 			"prestige_lvl":"${RPC.nFormat(Game.prestige, RPC.config.PRESTIGE_LONG_SCALE)}",
 			"resets":"${Game.resets.toString()}",
-			"season":"${Game.season}",
-			"drops":"${RPC.getDrops(Game.season)}",
 			"lumps":"${Game.lumps}",
 			"lump_status":"${RPC.lumpType(Game.lumpCurrentType)}",
 			"clicks":"${RPC.nFormat(Game.cookieClicks)}",
 			"cookies_per_click":"${RPC.nFormat(Game.computedMouseCps)}",
+			"season":"${Game.season}",
+			"drops":"${RPC.getDrops(Game.season)}",
+			"gc_clicks":"${RPC.nFormat(Game.goldenClicks)}",
+			"gc_missed":"${RPC.nFormat(Game.missedGoldenClicks)}",
 			"config": {
 				prestige_long_scale: ${RPC.config.PRESTIGE_LONG_SCALE},
 				cookies_long_scale: ${RPC.config.COOKIES_LONG_SCALE},
