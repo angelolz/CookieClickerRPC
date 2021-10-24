@@ -17,14 +17,14 @@ public class Server extends WebSocketServer
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake)
     {
-        Main.getLogger().info("Opened a connection.");
+        Main.getLogger().info("Opened a connection with Cookie Clicker.");
         Main.setStartTime(System.currentTimeMillis());
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote)
     {
-        Main.getLogger().info("Closed connection and stopped Rich Presence status. Exit code: {}. Reason: {}", code, reason);
+        Main.getLogger().info("Closed connection with Cookie Clicker and stopped Rich Presence status.", code, reason);
         DiscordRPC.discordClearPresence();
         Main.setStartTime(System.currentTimeMillis());
     }

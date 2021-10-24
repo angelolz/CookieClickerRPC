@@ -15,11 +15,13 @@ public class CookieData
         public int smallIconMode() { return small_icon_mode; }
     }
 
+    String version;
     String cookies, cps;
     String prestige_lvl, resets;
-    String season, drops;
     String lumps, lump_status;
     String clicks, cookies_per_click;
+    String season, drops;
+    String gc_clicks, gc_missed;
     private Config config;
 
     public String getSeason()
