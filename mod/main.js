@@ -7,7 +7,7 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 RPC.name = "Discord Rich Presence";
 RPC.id = "cc-rpc";
 RPC.author = "Angelolz";
-RPC.version = "v0.1";
+RPC.version = "v1.0";
 RPC.gameVersion = "2.042";
 
 RPC.launch = function()
@@ -89,7 +89,7 @@ RPC.launch = function()
 			console.log("[cc-rpc] established connection to websocket!")
 			RPC.wsCon = true;
 			Game.registerHook('check', sendData);
-			Game.Notify("Started Rich Presence Server!", "", [5,5], 6, false);
+			Game.Notify("Started Rich Presence Server!", `${RPC.version}`, [5,5], 6, false);
 		}
 
 		RPC.ws.onclose = function (event) {if(RPC.wsCon) { lostConnection(); }}
