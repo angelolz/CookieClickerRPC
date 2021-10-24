@@ -48,7 +48,7 @@ public class Main
         DiscordRichPresence.Builder rp = new DiscordRichPresence
             .Builder(c.cps + " per second")
             .setDetails(c.cookies + " cookies")
-            .setBigImage("icon", "CookieClickerRPC by Angelolz | {}" + c.version);
+            .setBigImage("icon", "CookieClickerRPC by Angelolz | " + c.version);
 
         if(c.getConfig().showElapsedTime())
         {
