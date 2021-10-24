@@ -6,7 +6,7 @@
 
     <groupId>com.angelolz</groupId>
     <artifactId>CC-RPC</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
