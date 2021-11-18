@@ -1,4 +1,5 @@
 /*jshint esversion: 8 */
+//hello!
 
 if(RPC === undefined) var RPC = {};
 if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieClicker/CCSE.js');
