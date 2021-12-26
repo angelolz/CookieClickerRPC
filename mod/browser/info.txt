@@ -1,0 +1,11 @@
+{
+	"Name": "Discord Rich Presence",
+	"ID": "drpbrowser",
+	"Author": "Angelolz",
+	"Description": "Adds rich presence for Cookie Clicker (BROWSER VERSION).",
+	"ModVersion": 2.031,
+	"GameVersion": 2.031,
+	"Date": "12/25/2021",
+	"Dependencies": ["CCSE"],
+	"Disabled": 1
+}

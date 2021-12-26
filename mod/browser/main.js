@@ -5,10 +5,10 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 
 //mod info
 RPC.name = "Discord Rich Presence";
-RPC.id = "cc-rpc";
+RPC.id = "drpbrowser";
 RPC.author = "Angelolz";
-RPC.version = "v1.0";
-RPC.gameVersion = "2.042";
+RPC.version = "v2.031";
+RPC.gameVersion = "2.031";
 
 RPC.launch = function()
 {
@@ -22,6 +22,12 @@ RPC.launch = function()
 		}
 	}
 
+	RPC.config = RPC.defaultConfig();
+
+	// save/load mod settings
+	RPC.save = function() { return JSON.stringify(RPC.config); }
+	RPC.load = function(str) { RPC.config = JSON.parse(str); }
+
 	RPC.init = function()
 	{
 		RPC.isLoaded = 1;
@@ -30,18 +36,12 @@ RPC.launch = function()
 		RPC.checkUpdate();
 	}
 
-	RPC.config = RPC.defaultConfig();
 
 	RPC.replaceGameMenu = function()
 	{
 		Game.customOptionsMenu.push(function()
 		{
 			CCSE.AppendCollapsibleOptionsMenu(RPC.name, RPC.getMenuString());
-		});
-
-		Game.customStatsMenu.push(function()
-		{
-			CCSE.AppendStatsVersionNumber(RPC.name, RPC.version);
 		});
 	}
 
@@ -50,14 +50,14 @@ RPC.launch = function()
 		let m = CCSE.MenuHelper, str;
 		str =
 			'<div class="listing">' +
+			m.ActionButton("RPC.config.SMALL_ICON_MODE == 5 ? RPC.config.SMALL_ICON_MODE = 0 : RPC.config.SMALL_ICON_MODE++; Game.UpdateMenu();", RPC.smallIconSettingText(RPC.config.SMALL_ICON_MODE)) +
+			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label>' +
 			m.ToggleButton(RPC.config, 'PRESTIGE_LONG_SCALE', "RPC_PRESTIGE_LONG_SCALE", "Long Scale for Prestige Level", "Short Scale for Prestige Level", "RPC.toggle") +
-			'<label>Change the scale setting for the Ascenion information.</label><br>' +
+			'<label>Change the scale setting for the Ascension information.</label><br>' +
 			m.ToggleButton(RPC.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "RPC.toggle") +
 			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
 			m.ToggleButton(RPC.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "RPC.toggle") +
 			'<label>Toggle display for how long you\'ve been playing this session.</label><br>' +
-			m.ActionButton("RPC.config.SMALL_ICON_MODE == 5 ? RPC.config.SMALL_ICON_MODE = 0 : RPC.config.SMALL_ICON_MODE++; Game.UpdateMenu();", RPC.smallIconSettingText(RPC.config.SMALL_ICON_MODE)) +
-			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label>' +
 			'</div>';
 
 		return str;
@@ -86,7 +86,7 @@ RPC.launch = function()
 
 		RPC.ws.onopen = function (event)
 		{
-			console.log("[cc-rpc] established connection to websocket!")
+			console.log("[rich presence] established connection to websocket!")
 			RPC.wsCon = true;
 			Game.registerHook('check', sendData);
 			Game.Notify("Started Rich Presence Server!", `${RPC.version}`, [5,5], 6, false);
@@ -101,16 +101,6 @@ RPC.launch = function()
 		}
 	}
 
-	RPC.save = function()
-	{
-		return JSON.stringify(RPC.config);
-	}
-
-	RPC.load = function(str)
-	{
-		RPC.config = JSON.parse(str);
-	}
-
 	RPC.checkUpdate = async function ()
 	{
 		var res = await fetch("https://api.github.com/repos/angelolz1/CookieClickerRPC/releases/latest");
@@ -122,11 +112,14 @@ RPC.launch = function()
 		}
 	}
 
-	// helper functions
+	/*
+		below are the helper functions for this mod
+
+		!!!NOTE!!!: RPC.getScale and RPC.nFormat are functions that are from the
+		Cookie Monster Mod, but are slightly modified. I appreciate the team behind the CM mod.
+	*/
 	RPC.getScale = function(index, useLong)
 	{
-		//thank you cookie monster mod <3
-
 		longScale = [
 			'',
 			'',
@@ -190,13 +183,9 @@ RPC.launch = function()
 
 	RPC.nFormat = function(num, useLong)
 	{
-		//ty again cookie monster mod :DDDD
 		let val;
 
-		if(num < 1000000)
-		{
-			val = num.toLocaleString("en-US");
-		}
+		if(num < 1000000) val = num.toLocaleString("en-US");
 
 		else
 		{
@@ -223,9 +212,44 @@ RPC.launch = function()
 			case "easter":
 				return `${Game.GetHowManyEggs()}/${Game.easterEggs.length} eggs`;
 			case "fools":
-				return "69/420 c00kiez";
+				//fools doesn't have any drops
+				return "Business. Serious Business."
 			default:
-				return 0;
+				return "";
+		}
+	}
+
+	RPC.lumpType = function(type)
+	{
+		switch(type)
+		{
+			case 0:
+				return "normal";
+			case 1:
+				return "bifurcated";
+			case 2:
+				return "golden";
+			case 3:
+				return "meaty";
+			case 4:
+				return "caramelized";
+		}
+	}
+
+	RPC.getSeasonName = function(season)
+	{
+		switch(season)
+		{
+			case "christmas":
+				return Game.seasons.christmas.name
+			case "easter":
+				return Game.seasons.easter.name
+			case "fools":
+				return Game.seasons.fools.name
+			case "halloween":
+				return Game.seasons.halloween.name
+			case "valentines":
+				return Game.seasons.valentines.name
 		}
 	}
 
@@ -245,23 +269,6 @@ RPC.launch = function()
 				return "Show Current Season Info"
 			case 5:
 				return "Don't Show Any Info"
-		}
-	}
-
-	RPC.lumpType = function(type)
-	{
-		switch(type)
-		{
-			case 0:
-				return "normal";
-			case 1:
-				return "bifurcated";
-			case 2:
-				return "golden";
-			case 3:
-				return "meaty";
-			case 4:
-				return "caramelized";
 		}
 	}
 
@@ -302,6 +309,7 @@ function sendData()
 			"clicks":"${RPC.nFormat(Game.cookieClicks)}",
 			"cookies_per_click":"${RPC.nFormat(Game.computedMouseCps)}",
 			"season":"${Game.season}",
+			"season_name":"${RPC.getSeasonName(Game.season)}",
 			"drops":"${RPC.getDrops(Game.season)}",
 			"gc_clicks":"${RPC.nFormat(Game.goldenClicks)}",
 			"gc_missed":"${RPC.nFormat(Game.missedGoldenClicks)}",
@@ -316,7 +324,7 @@ function sendData()
 
 function lostConnection()
 {
-	console.log("[cc-rpc] Lost connection to websocket and reconnecting...")
+	console.log("[rich presence] Lost connection to websocket and reconnecting...")
 	RPC.wsCon = false;
 	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7]);
 	Game.removeHook('check', sendData);
@@ -331,7 +339,7 @@ function reconnect()
 
 		RPC.ws.onopen = function (event)
 		{
-			console.log("[cc-rpc] Reconnected to websocket!")
+			console.log("[rich presence] Reconnected to websocket!")
 			RPC.wsCon = true;
 			Game.Notify("Reconnected to Rich Presence Server!", "", [4, 5]);
 			Game.removeHook('check', reconnect);

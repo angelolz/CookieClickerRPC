@@ -24,7 +24,7 @@ public class Server extends WebSocketServer
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote)
     {
-        Main.getLogger().info("Closed connection with Cookie Clicker and stopped Rich Presence status.", code, reason);
+        Main.getLogger().info("Closed connection with Cookie Clicker and stopped Rich Presence status.");
         DiscordRPC.discordClearPresence();
         Main.setStartTime(System.currentTimeMillis());
     }

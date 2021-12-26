@@ -1,0 +1,12 @@
+{
+	"Name": "Discord Rich Presence+",
+	"ID": "drpplus",
+	"Author": "Angelolz",
+	"Description": "Allows you to show different info in your Rich Presence other than your Bank and CPS.",
+	"ModVersion": 2.043,
+	"GameVersion": 2.043,
+	"Date": "12/25/2021",
+	"Dependencies": ["CCSE"],
+	"Disabled": 1,
+	"AllowSteamAchievs": 1
+}
