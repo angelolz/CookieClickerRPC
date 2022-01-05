@@ -54,7 +54,6 @@ DRP.launch = function()
 				if(DRP.config.MODE == 6)
 				{
 					if(cycleIndex == -1 || cycleIndex == 6) cycleIndex = 0
-					console.log("cycleIndex = " + cycleIndex)
 					arr = DRP.getInfo(cycleIndex);
 					cycleIndex++;
 				}
