@@ -99,7 +99,7 @@ DRP.launch = function()
 			DRP.wsCon = true;
 			Game.registerHook('check', sendData);
 			Game.Notify("Started Rich Presence Server!", `${DRP.version}`, [5,5], 6, false);
-			Game.Notify("New Update!", "Your client may be outdated! Click <a href='https://github.com/angelolz1/CookieClickerRPC/releases' target='_blank'>here</a> to update it!", [1,7]);
+			Game.Notify("New Update!", "Your Rich Presence client may be outdated! Click <a href='https://github.com/angelolz1/CookieClickerRPC/releases' target='_blank'>here</a> to update it!", [1,7]);
 		}
 
 		DRP.ws.onclose = function (event) {if(DRP.wsCon) { lostConnection(); }}
