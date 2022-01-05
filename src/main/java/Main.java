@@ -15,7 +15,7 @@ public class Main
 {
     private static Logger logger;
     private static long startTime;
-    private final static String version = "2.031";
+    private final static String version = "1.1";
 
     public static void main(String[] args)
     {
@@ -43,7 +43,7 @@ public class Main
 
         catch(Exception e)
         {
-            logger.error("Unable to open Cookie Clicker website. Please manually open the website in your browser.");
+            logger.error("Unable to open Cookie Clicker website. Please manually open the Cookie Clicker website in your browser.");
             logger.debug("Error: {}", e.getMessage());
         }
 
@@ -58,11 +58,11 @@ public class Main
         DiscordRichPresence.Builder rp = new DiscordRichPresence
             .Builder(c.cps + " per second")
             .setDetails(c.cookies + " cookies")
-            .setBigImage("icon", "CookieClickerRPC by Angelolz");
+            .setBigImage("icon", "Rich Presence by Angelolz");
 
         if(c.config.show_elapsed_time == 1) rp.setStartTimestamps(startTime);
 
-        switch(c.config.small_icon_mode)
+        switch(c.config.mode)
         {
             case 0:
                 rp.setSmallImage("legacy", String.format("Prestige Lv. %s with %s ascends", c.prestige_lvl, c.resets));
