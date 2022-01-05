@@ -17,6 +17,7 @@ public class Server extends WebSocketServer
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake)
     {
+        conn.send("v" + Main.getVersion());
         Main.getLogger().info("Opened a connection with Cookie Clicker.");
         Main.setStartTime(System.currentTimeMillis());
     }
@@ -36,6 +37,13 @@ public class Server extends WebSocketServer
 
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
+
+        if(!Main.warned && !c.version.equalsIgnoreCase(Main.getVersion()))
+        {
+            Main.getLogger().warn("Your client is out of date. Please update to the new version by visiting");
+            Main.getLogger().warn("https://github.com/angelolz1/CookieClickerRPC/releases");
+            Main.warned = true;
+        }
 
         Main.updateRichPresence(c);
     }

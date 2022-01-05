@@ -15,12 +15,13 @@ public class Main
 {
     private static Logger logger;
     private static long startTime;
-    private final static String version = "1.1";
+    private final static String version = "v1.1";
+    public static boolean warned = false;
 
     public static void main(String[] args)
     {
         logger = LoggerFactory.getLogger(Main.class);
-        logger.info("Cookie Clicker - Discord Rich Presence v{}", version);
+        logger.info("Cookie Clicker - Discord Rich Presence {}", version);
 
         DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
             .setReadyEventHandler((user) -> {
@@ -52,6 +53,8 @@ public class Main
     }
 
     public static Logger getLogger() { return logger; }
+
+    public static String getVersion() { return version; }
 
     public static void updateRichPresence(CookieData c)
     {

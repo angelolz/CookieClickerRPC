@@ -42,7 +42,6 @@ DRP.launch = function()
 		DRP.isLoaded = 1;
 		DRP.replaceGameMenu();
 		DRP.setupWebSocket();
-		DRP.checkUpdate();
 	}
 
 	//menu stuff here
@@ -100,6 +99,7 @@ DRP.launch = function()
 			DRP.wsCon = true;
 			Game.registerHook('check', sendData);
 			Game.Notify("Started Rich Presence Server!", `${DRP.version}`, [5,5], 6, false);
+			Game.Notify("New Update!", "Your client may be outdated! Click <a href='https://github.com/angelolz1/CookieClickerRPC/releases' target='_blank'>here</a> to update it!", [1,7]);
 		}
 
 		DRP.ws.onclose = function (event) {if(DRP.wsCon) { lostConnection(); }}
@@ -109,15 +109,6 @@ DRP.launch = function()
 			Game.Notify("Couldn't connect to Rich Presence Server!", "Please check if the app is open.", [1,7]);
 			Game.registerHook('check', reconnect);
 		}
-	}
-
-	DRP.checkUpdate = async function ()
-	{
-		var res = await fetch("https://api.github.com/repos/angelolz1/CookieClickerRPC/releases/latest");
-		var json = await res.json();
-
-		if(json.tag_name != DRP.version)
-			Game.Notify("New update to Rich Presence!", `<a ${Game.clickStr}="Steam.openLink('https://github.com/angelolz1/CookieClickerRPC/releases')">Click here</a> to download it!`, [16,5]);
 	}
 
 	/*
