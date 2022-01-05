@@ -26,7 +26,7 @@ DRP.launch = function()
 			PRESTIGE_LONG_SCALE: 1,
 			COOKIES_LONG_SCALE: 0,
 			SHOW_ELAPSED_TIME: 1,
-			MODE: 2
+			SMALL_ICON_MODE: 2
 		}
 	}
 
@@ -59,14 +59,14 @@ DRP.launch = function()
 		let m = CCSE.MenuHelper, str;
 		str =
 			'<div class="listing">' +
-			m.ActionButton("RPC.config.MODE == 5 ? RPC.config.MODE = 0 : RPC.config.MODE++; Game.UpdateMenu();", DRP.smallIconSettingText(DRP.config.MODE)) +
-			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label>' +
-			m.ToggleButton(DRP.config, 'PRESTIGE_LONG_SCALE', "RPC_PRESTIGE_LONG_SCALE", "Long Scale for Prestige Level", "Short Scale for Prestige Level", "RPC.toggle") +
+			m.ActionButton("DRP.config.SMALL_ICON_MODE == 5 ? DRP.config.SMALL_ICON_MODE = 0 : DRP.config.SMALL_ICON_MODE++; Game.UpdateMenu();", DRP.smallIconSettingText(DRP.config.SMALL_ICON_MODE)) +
+			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label><br>' +
+			m.ToggleButton(DRP.config, 'PRESTIGE_LONG_SCALE', "RPC_PRESTIGE_LONG_SCALE", "Long Scale for Prestige Level", "Short Scale for Prestige Level", "DRP.toggle") +
 			'<label>Change the scale setting for the Ascension information.</label><br>' +
-			m.ToggleButton(DRP.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "RPC.toggle") +
+			m.ToggleButton(DRP.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "DRP.toggle") +
 			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
-			m.ToggleButton(DRP.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "RPC.toggle") +
-			'<label>Toggle display for how long you\'ve been playing this session.</label><br>' +
+			m.ToggleButton(DRP.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "DRP.toggle") +
+			'<label>Toggle display for how long you\'ve been playing this session.</label>' +
 			'</div>';
 
 		return str;
@@ -123,7 +123,7 @@ DRP.launch = function()
 	/*
 		below are the helper functions for this mod
 
-		!!!NOTE!!!: RPC.getScale and RPC.nFormat are functions that are from the
+		!!!NOTE!!!: DRP.getScale and DRP.nFormat are functions that are from the
 		Cookie Monster Mod, but are slightly modified. I appreciate the team behind the CM mod.
 	*/
 	DRP.getScale = function(index, useLong)
@@ -258,6 +258,8 @@ DRP.launch = function()
 				return Game.seasons.halloween.name
 			case "valentines":
 				return Game.seasons.valentines.name
+			default:
+				return "None"
 		}
 	}
 
@@ -320,7 +322,7 @@ function sendData()
 				prestige_long_scale: ${DRP.config.PRESTIGE_LONG_SCALE},
 				cookies_long_scale: ${DRP.config.COOKIES_LONG_SCALE},
 				show_elapsed_time: ${DRP.config.SHOW_ELAPSED_TIME},
-				mode: ${DRP.config.mode}
+				small_icon_mode: ${DRP.config.SMALL_ICON_MODE}
 			}
 		}`);
 }

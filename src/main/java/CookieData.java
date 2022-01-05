@@ -5,7 +5,7 @@ public class CookieData
         int prestige_long_scale;
         int cookies_long_scale;
         int show_elapsed_time;
-        int mode;
+        int small_icon_mode;
     }
 
     String version;

@@ -62,7 +62,7 @@ public class Main
 
         if(c.config.show_elapsed_time == 1) rp.setStartTimestamps(startTime);
 
-        switch(c.config.mode)
+        switch(c.config.small_icon_mode)
         {
             case 0:
                 rp.setSmallImage("legacy", String.format("Prestige Lv. %s with %s ascends", c.prestige_lvl, c.resets));
@@ -80,7 +80,8 @@ public class Main
                 rp.setSmallImage("goldencookie", String.format("%s GCs clicked | %s GCs missed", c.gc_clicks, c.gc_missed));
                 break;
             case 4:
-                rp.setSmallImage(c.season, String.format("%s | %s", c.season_name, c.drops));
+                if(!c.season.isEmpty())
+                    rp.setSmallImage(c.season, String.format("%s | %s", c.season_name, c.drops));
                 break;
             case 5:
                 break;
