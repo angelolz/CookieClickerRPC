@@ -25,7 +25,7 @@ public class Main
         DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
             .setReadyEventHandler((user) -> {
                 logger.info("Welcome, {}#{}! Started Discord Rich Presence instance.", user.username, user.discriminator);
-                logger.info("Your Rich Presence will show once Cookie Clicker is open.");
+                logger.info("Your Rich Presence will show once the Cookie Clicker mod is loaded.");
             })
             .build();
         DiscordRPC.discordInitialize("895895624891895828", handlers, true);
