@@ -16,7 +16,7 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 DRP.name = "Rich Presence+";
 DRP.id = "drpplus";
 DRP.author = "Angelolz";
-DRP.version = "v2.043";
+DRP.version = "v1.1";
 DRP.gameVersion = "2.043";
 
 //other global vars
@@ -47,7 +47,7 @@ DRP.launch = function()
 		//override rich presence updater
 		Steam.logic = function(T)
 		{
-			if (T>0 && T%(Game.fps*3)==2)
+			if (T>0 && T%(Game.fps*10)==9)
 			{
 				var arr;
 
