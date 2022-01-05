@@ -4,7 +4,7 @@ if(typeof Steam == 'undefined')
 {
 	Game.Notify("Wrong DRP+ version!", "The mod you're using for Discord Rich " +
 		"Presence+ is meant for <b>Steam only</b>. Please download the one for " +
-		"browser <a href='https://github.com/angelolz1/CookieClickerRPC/releases'" +
+		"browser <a href='https://github.com/angelolz1/CookieClickerRPC/releases' " +
 		"target='_blank'>here</a>!", [1,7])
 	throw new Error("The mod was not loaded. This mod was meant for Steam.")
 }
@@ -47,7 +47,7 @@ DRP.launch = function()
 		//override rich presence updater
 		Steam.logic = function(T)
 		{
-			if (T>0 && T%(Game.fps*10)==9)
+			if (T > 0 && T % (Game.fps*10) == 9)
 			{
 				var arr;
 
