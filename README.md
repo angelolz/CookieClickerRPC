@@ -1,11 +1,6 @@
 # Cookie Clicker Rich Presence Creator
 This Cookie Clicker mod will allow you to share your game stats with everyone on Discord!
 
-## Requirements
-- CCSE
-- The Rich Presence Cookie Clicker mod
-- The Rich Presence Java Client
-- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
 
 ## Mod Installation (Steam)
 You can download this mod at the Steam Workshop **[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340)**.
@@ -13,20 +8,23 @@ Unfortunately, you won't be able to have a small icon like the browser version o
 cycle through all the possible information that the mod provides :)
    
 ## Installation (Browser)
-Run the executable program. Upon running the program, it should automatically open the Cookie Clicker website for you.
+### Requirements
+- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
+
+### Running the program
+**Windows**
+- Just launch the executable program!
+
+**macOS / Linux**
+- Open a terminal and navigate to where the jar file is stored using the `cd` command.
+- Type the command: `java -jar *.jar`.
+
+Upon running the program, it should automatically open the Cookie Clicker website for you.
 
 Copy this code and save it as a bookmark.
 ```javascript
 javascript: (function () {   Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
 ```
-
-## Enabling Rich Presence
-### Windows
-- Just launch the executable program!
-
-### macOS / Linux
-- Open a terminal and navigate to where the jar file is stored using the `cd` command.
-- Type the command: `java -jar *.jar`.
 
 If everything was installed correctly, you should see the below output and your rich presence on Discord!
 ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
