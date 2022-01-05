@@ -1,38 +1,36 @@
 /*jshint esversion: 8 */
-//if attempting to load the mod on the web version (idk it could happen lol)
-if(typeof Steam == 'undefined')
+//if attempting to load the mod on the web version (this one is more common than the other way around)
+if(typeof Steam == 'object')
 {
 	Game.Notify("Wrong DRP+ version!", "The mod you're using for Discord Rich " +
-		"Presence+ is meant for <b>Steam only</b>. Please download the one for " +
-		"browser <a href='https://github.com/angelolz1/CookieClickerRPC/releases'" +
-		"target='_blank'>here</a>!", [1,7])
-	throw new Error("The mod was not loaded. This mod was meant for Steam.")
+		"Presence+ is meant for <b>browsers only</b>. Please download the one for " +
+		`Steam <a ${Game.clickStr}="Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340')">here</a>!`, [1,7])
+	throw new Error("The mod was not loaded. This mod was meant for the browser version.")
 }
 
 if(DRP === undefined) var DRP = {};
 if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieClicker/CCSE.js');
 
 //mod info
-DRP.name = "Rich Presence+";
-DRP.id = "drpplus";
+DRP.name = "Rich Presence";
+DRP.id = "drpbrowser";
 DRP.author = "Angelolz";
-DRP.version = "v2.043";
-DRP.gameVersion = "2.043";
-
-//other global vars
-var cycleIndex = -1;
+DRP.version = "v1.1";
+DRP.gameVersion = "2.031";
 
 DRP.launch = function()
 {
 	DRP.defaultConfig = function()
 	{
 		return {
-			USE_LONG_SCALE: 1,
+			PRESTIGE_LONG_SCALE: 1,
+			COOKIES_LONG_SCALE: 0,
+			SHOW_ELAPSED_TIME: 1,
 			MODE: 2
 		}
 	}
 
-	//initialize config
+	// initialize config
 	DRP.config = DRP.defaultConfig();
 
 	// save/load mod settings
@@ -43,31 +41,8 @@ DRP.launch = function()
 	{
 		DRP.isLoaded = 1;
 		DRP.replaceGameMenu();
-
-		//override rich presence updater
-		Steam.logic = function(T)
-		{
-			if (T>0 && T%(Game.fps*10)==9)
-			{
-				var arr;
-
-				if(DRP.config.MODE == 6)
-				{
-					if(cycleIndex == -1 || cycleIndex == 6) cycleIndex = 0
-					console.log("cycleIndex = " + cycleIndex)
-					arr = DRP.getInfo(cycleIndex);
-					cycleIndex++;
-				}
-
-				else
-				{
-					cycleIndex = -1;
-					arr = DRP.getInfo(DRP.config.MODE)
-				}
-
-				send({id:'update presence',arr:arr})
-			}
-		}
+		DRP.setupWebSocket();
+		DRP.checkUpdate();
 	}
 
 	//menu stuff here
@@ -84,10 +59,14 @@ DRP.launch = function()
 		let m = CCSE.MenuHelper, str;
 		str =
 			'<div class="listing">' +
-			m.ActionButton("DRP.config.MODE == 6 ? DRP.config.MODE = 0 : DRP.config.MODE++; Game.UpdateMenu();", DRP.smallIconSettingText(DRP.config.MODE)) +
-			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label><br>' +
-			m.ToggleButton(DRP.config, 'USE_LONG_SCALE', "DRP_USE_LONG_SCALE", "Long Scale", "Short Scale", "DRP.toggle") +
-			'<label>Change the scale setting in the Rich Presence (ex. Quattordec or Quattordecillion).</label><br>' +
+			m.ActionButton("RPC.config.MODE == 5 ? RPC.config.MODE = 0 : RPC.config.MODE++; Game.UpdateMenu();", DRP.smallIconSettingText(DRP.config.MODE)) +
+			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label>' +
+			m.ToggleButton(DRP.config, 'PRESTIGE_LONG_SCALE', "RPC_PRESTIGE_LONG_SCALE", "Long Scale for Prestige Level", "Short Scale for Prestige Level", "RPC.toggle") +
+			'<label>Change the scale setting for the Ascension information.</label><br>' +
+			m.ToggleButton(DRP.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "RPC.toggle") +
+			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
+			m.ToggleButton(DRP.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "RPC.toggle") +
+			'<label>Toggle display for how long you\'ve been playing this session.</label><br>' +
 			'</div>';
 
 		return str;
@@ -110,48 +89,44 @@ DRP.launch = function()
 		l(button).className = 'option' + ((DRP.config[name] ^ invert) ? '' : ' off');
 	}
 
+	//websocket and update checker
+	DRP.setupWebSocket = function ()
+	{
+		DRP.ws = new WebSocket("ws://localhost:6969/");
+
+		DRP.ws.onopen = function (event)
+		{
+			console.log("[rich presence] established connection to websocket!")
+			DRP.wsCon = true;
+			Game.registerHook('check', sendData);
+			Game.Notify("Started Rich Presence Server!", `${DRP.version}`, [5,5], 6, false);
+		}
+
+		DRP.ws.onclose = function (event) {if(DRP.wsCon) { lostConnection(); }}
+
+		DRP.ws.onerror = function (event)
+		{
+			Game.Notify("Couldn't connect to Rich Presence Server!", "Please check if the app is open.", [1,7]);
+			Game.registerHook('check', reconnect);
+		}
+	}
+
+	DRP.checkUpdate = async function ()
+	{
+		var res = await fetch("https://api.github.com/repos/angelolz1/CookieClickerRPC/releases/latest");
+		var json = await res.json();
+
+		if(json.tag_name != DRP.version)
+			Game.Notify("New update to Rich Presence!", `<a ${Game.clickStr}="Steam.openLink('https://github.com/angelolz1/CookieClickerRPC/releases')">Click here</a> to download it!`, [16,5]);
+	}
+
 	/*
 		below are the helper functions for this mod
 
-		!!!NOTE!!!: DRP.getScale and DRP.nFormat are functions that are from the
+		!!!NOTE!!!: RPC.getScale and RPC.nFormat are functions that are from the
 		Cookie Monster Mod, but are slightly modified. I appreciate the team behind the CM mod.
 	*/
-
-	DRP.getInfo = function(mode)
-	{
-		var arr = [];
-		switch(mode)
-		{
-			case 0: //show prestige info
-				arr[0] = `Prestige Lv. ${DRP.nFormat(Game.prestige)}`
-				arr[1] = `${Game.resets.toString()} Ascensions`
-				break;
-			case 1: //show sugar lump info
-				arr[0] = `${Game.lumps == -1 ? "0" : Game.lumps} sugar lumps`
-				arr[1] = Game.lumps == -1 ? "No sugar lumps growing" : `Growing a ${DRP.lumpType(Game.lumpCurrentType)} lump`
-				break;
-			case 2: //show click info
-				arr[0] = `${DRP.nFormat(Game.cookieClicks)} clicks`
-				arr[1] = `${DRP.nFormat(Game.computedMouseCps)} per click`
-				break;
-			case 3: //show golden cookie info
-				arr[0] = `${DRP.nFormat(Game.goldenClicks)} Golden Cookies clicked`
-				arr[1] = `${DRP.nFormat(Game.missedGoldenClicks)} Golden Cookies missed`
-				break;
-			case 4: //show season info
-				arr[0] = `Season: ${DRP.getSeasonName(Game.season)}`
-				arr[1] = `${DRP.getDrops(Game.season)}`
-				break;
-			case 5:	//show cookie info
-				arr[0] = `${DRP.nFormat(Game.cookies, DRP.config.COOKIES_LONG_SCALE)} cookies`
-				arr[1] = `${DRP.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), DRP.config.COOKIES_LONG_SCALE)} per second`
-				break;
-		}
-
-		return arr;
-	}
-
-	DRP.getScale = function(index)
+	DRP.getScale = function(index, useLong)
 	{
 		longScale = [
 			'',
@@ -211,10 +186,10 @@ DRP.launch = function()
 			'Quattuorvigint',
 		];
 
-		return DRP.config.USE_LONG_SCALE ? longScale[index] : shortScale[index];
+		return useLong ? longScale[index] : shortScale[index];
 	}
 
-	DRP.nFormat = function(num)
+	DRP.nFormat = function(num, useLong)
 	{
 		let val;
 
@@ -225,7 +200,7 @@ DRP.launch = function()
 			const exponential = num.toExponential().toString();
 			const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
 			val = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
-			val += " " + DRP.getScale(AmountOfTenPowerThree);
+			val += " " + DRP.getScale(AmountOfTenPowerThree, useLong);
 		}
 
 		return val;
@@ -291,19 +266,17 @@ DRP.launch = function()
 		switch(mode)
 		{
 			case 0:
-				return "Show Prestige Info"
+				return "Show Prestige Info";
 			case 1:
-				return "Show Sugar Lump Info"
+				return "Show Sugar Lump Info";
 			case 2:
-				return "Show Clicks Info"
+				return "Show Clicks Info";
 			case 3:
-				return "Show Golden Cookie Info"
+				return "Show Golden Cookie Info";
 			case 4:
 				return "Show Current Season Info"
 			case 5:
-				return "Show Bank and CPS Info"
-			case 6:
-				return "Cycle Through All Info"
+				return "Don't Show Any Info"
 		}
 	}
 
@@ -321,5 +294,64 @@ if(!DRP.isLoaded)
 		if(!CCSE) var CCSE = {};
 		if(!CCSE.postLoadHooks) CCSE.postLoadHooks = [];
 		CCSE.postLoadHooks.push(DRP.launch);
+	}
+}
+
+// websocket functions
+function sendData()
+{
+	DRP.ws.send(
+		`{
+			"version": "${DRP.version}",
+			"cookies": "${DRP.nFormat(Game.cookies, DRP.config.COOKIES_LONG_SCALE)}",
+			"cps":"${DRP.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), DRP.config.COOKIES_LONG_SCALE)}",
+			"prestige_lvl":"${DRP.nFormat(Game.prestige, DRP.config.PRESTIGE_LONG_SCALE)}",
+			"resets":"${Game.resets.toString()}",
+			"lumps":"${Game.lumps}",
+			"lump_status":"${DRP.lumpType(Game.lumpCurrentType)}",
+			"clicks":"${DRP.nFormat(Game.cookieClicks)}",
+			"cookies_per_click":"${DRP.nFormat(Game.computedMouseCps)}",
+			"season":"${Game.season}",
+			"season_name":"${DRP.getSeasonName(Game.season)}",
+			"drops":"${DRP.getDrops(Game.season)}",
+			"gc_clicks":"${DRP.nFormat(Game.goldenClicks)}",
+			"gc_missed":"${DRP.nFormat(Game.missedGoldenClicks)}",
+			"config": {
+				prestige_long_scale: ${DRP.config.PRESTIGE_LONG_SCALE},
+				cookies_long_scale: ${DRP.config.COOKIES_LONG_SCALE},
+				show_elapsed_time: ${DRP.config.SHOW_ELAPSED_TIME},
+				mode: ${DRP.config.mode}
+			}
+		}`);
+}
+
+function lostConnection()
+{
+	console.log("[rich presence] Lost connection to websocket and reconnecting...")
+	DRP.wsCon = false;
+	Game.Notify("Lost connection with Rich Presence Server!", "Check to see if the app is open. Reconnecting...", [1,7]);
+	Game.removeHook('check', sendData);
+	Game.registerHook('check', reconnect);
+}
+
+function reconnect()
+{
+	if (!DRP.wsCon)
+	{
+		DRP.ws = new WebSocket("ws://localhost:6969");
+
+		DRP.ws.onopen = function (event)
+		{
+			console.log("[rich presence] Reconnected to websocket!")
+			DRP.wsCon = true;
+			Game.Notify("Reconnected to Rich Presence Server!", "", [4, 5]);
+			Game.removeHook('check', reconnect);
+			Game.registerHook('check', sendData);
+		}
+
+		DRP.ws.onclose = function (event)
+		{
+			if (DRP.wsCon) lostConnection();
+		}
 	}
 }
