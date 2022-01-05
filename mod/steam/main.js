@@ -47,7 +47,7 @@ DRP.launch = function()
 		//override rich presence updater
 		Steam.logic = function(T)
 		{
-			if (T>0 && T%(Game.fps*3)==2)
+			if (T>0 && T%(Game.fps*10)==9)
 			{
 				var arr;
 
