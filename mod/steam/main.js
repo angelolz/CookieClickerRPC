@@ -1,18 +1,30 @@
 /*jshint esversion: 8 */
+//if attempting to load the mod on the web version (idk it could happen lol)
+if(typeof Steam == 'undefined')
+{
+	Game.Notify("Wrong DRP+ version!", "The mod you're using for Discord Rich " +
+		"Presence+ is meant for <b>Steam only</b>. Please download the one for " +
+		"browser <a href='https://github.com/angelolz1/CookieClickerRPC/releases'" +
+		"target='_blank'>here</a>!", [1,7])
+	throw new Error("The mod was not loaded. This mod was meant for Steam.")
+}
 
-if(RPC === undefined) var RPC = {};
+if(DRP === undefined) var DRP = {};
 if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieClicker/CCSE.js');
 
 //mod info
-RPC.name = "Rich Presence+";
-RPC.id = "drpplus";
-RPC.author = "Angelolz";
-RPC.version = "v2.043";
-RPC.gameVersion = "2.043";
+DRP.name = "Rich Presence+";
+DRP.id = "drpplus";
+DRP.author = "Angelolz";
+DRP.version = "v2.043";
+DRP.gameVersion = "2.043";
 
-RPC.launch = function()
+//other global vars
+var cycleIndex = -1;
+
+DRP.launch = function()
 {
-	RPC.defaultConfig = function()
+	DRP.defaultConfig = function()
 	{
 		return {
 			USE_LONG_SCALE: 1,
@@ -20,50 +32,37 @@ RPC.launch = function()
 		}
 	}
 
-	RPC.config = RPC.defaultConfig();
+	//initialize config
+	DRP.config = DRP.defaultConfig();
 
 	// save/load mod settings
-	RPC.save = function() { return JSON.stringify(RPC.config); }
-	RPC.load = function(str) { RPC.config = JSON.parse(str); }
+	DRP.save = function() { return JSON.stringify(DRP.config); }
+	DRP.load = function(str) { DRP.config = JSON.parse(str); }
 
-	RPC.init = function()
+	DRP.init = function()
 	{
-		RPC.isLoaded = 1;
-		RPC.replaceGameMenu();
+		DRP.isLoaded = 1;
+		DRP.replaceGameMenu();
 
 		//override rich presence updater
 		Steam.logic = function(T)
 		{
-			if (T>0 && T%(Game.fps*5)==4)
+			if (T>0 && T%(Game.fps*3)==2)
 			{
-				var arr=[];
+				var arr;
 
-				switch(RPC.config.MODE)
+				if(DRP.config.MODE == 6)
 				{
-					case 0: //show prestige info
-						arr[0] = `Prestige Lv. ${RPC.nFormat(Game.prestige)}`
-						arr[1] = `${Game.resets.toString()} Ascencions`
-						break;
-					case 1: //show sugar lump info
-						arr[0] = `${Game.lumps == -1 ? "0" : Game.lumps} sugar lumps`
-						arr[1] = Game.lumps == -1 ? "No sugar lumps growing" : `Growing a ${RPC.lumpType(Game.lumpCurrentType)} lump`
-						break;
-					case 2: //show click info
-						arr[0] = `${RPC.nFormat(Game.cookieClicks)} clicks`
-						arr[1] = `${RPC.nFormat(Game.computedMouseCps)} per click`
-						break;
-					case 3: //show golden cookie info
-						arr[0] = `${RPC.nFormat(Game.goldenClicks)} Golden Cookies clicked`
-						arr[1] = `${RPC.nFormat(Game.missedGoldenClicks)} Golden Cookies missed`
-						break;
-					case 4: //show season info
-						arr[0] = `Season: ${RPC.getSeasonName(Game.season)}`
-						arr[1] = `${RPC.getDrops(Game.season)}`
-						break;
-					case 5:	//show cookie info
-						arr[0] = `${RPC.nFormat(Game.cookies, RPC.config.COOKIES_LONG_SCALE)} cookies`
-						arr[1] = `${RPC.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), RPC.config.COOKIES_LONG_SCALE)} per second`
-						break;
+					if(cycleIndex == -1 || cycleIndex == 6) cycleIndex = 0
+					console.log("cycleIndex = " + cycleIndex)
+					arr = DRP.getInfo(cycleIndex);
+					cycleIndex++;
+				}
+
+				else
+				{
+					cycleIndex = -1;
+					arr = DRP.getInfo(DRP.config.MODE)
 				}
 
 				send({id:'update presence',arr:arr})
@@ -71,52 +70,88 @@ RPC.launch = function()
 		}
 	}
 
-	RPC.replaceGameMenu = function()
+	//menu stuff here
+	DRP.replaceGameMenu = function()
 	{
 		Game.customOptionsMenu.push(function()
 		{
-			CCSE.AppendCollapsibleOptionsMenu(RPC.name, RPC.getMenuString());
+			CCSE.AppendCollapsibleOptionsMenu(DRP.name, DRP.getMenuString());
 		});
 	}
 
-	RPC.getMenuString = function()
+	DRP.getMenuString = function()
 	{
 		let m = CCSE.MenuHelper, str;
 		str =
 			'<div class="listing">' +
-			m.ActionButton("RPC.config.MODE == 5 ? RPC.config.MODE = 0 : RPC.config.MODE++; Game.UpdateMenu();", RPC.smallIconSettingText(RPC.config.MODE)) +
+			m.ActionButton("DRP.config.MODE == 6 ? DRP.config.MODE = 0 : DRP.config.MODE++; Game.UpdateMenu();", DRP.smallIconSettingText(DRP.config.MODE)) +
 			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label><br>' +
-			m.ToggleButton(RPC.config, 'USE_LONG_SCALE', "RPC_USE_LONG_SCALE", "Long Scale", "Short Scale", "RPC.toggle") +
+			m.ToggleButton(DRP.config, 'USE_LONG_SCALE', "DRP_USE_LONG_SCALE", "Long Scale", "Short Scale", "DRP.toggle") +
 			'<label>Change the scale setting in the Rich Presence (ex. Quattordec or Quattordecillion).</label><br>' +
 			'</div>';
 
 		return str;
 	}
 
-	RPC.toggle = function(name, button, on, off, invert)
+	DRP.toggle = function(name, button, on, off, invert)
 	{
-		if(RPC.config[name])
+		if(DRP.config[name])
 		{
 			l(button).innerHTML = off;
-			RPC.config[name] = 0;
+			DRP.config[name] = 0;
 		}
 
 		else
 		{
 			l(button).innerHTML = on;
-			RPC.config[name] = 1;
+			DRP.config[name] = 1;
 		}
 
-		l(button).className = 'option' + ((RPC.config[name] ^ invert) ? '' : ' off');
+		l(button).className = 'option' + ((DRP.config[name] ^ invert) ? '' : ' off');
 	}
 
 	/*
 		below are the helper functions for this mod
 
-		!!!NOTE!!!: RPC.getScale and RPC.nFormat are functions that are from the
+		!!!NOTE!!!: DRP.getScale and DRP.nFormat are functions that are from the
 		Cookie Monster Mod, but are slightly modified. I appreciate the team behind the CM mod.
 	*/
-	RPC.getScale = function(index)
+
+	DRP.getInfo = function(mode)
+	{
+		var arr = [];
+		switch(mode)
+		{
+			case 0: //show prestige info
+				arr[0] = `Prestige Lv. ${DRP.nFormat(Game.prestige)}`
+				arr[1] = `${Game.resets.toString()} Ascensions`
+				break;
+			case 1: //show sugar lump info
+				arr[0] = `${Game.lumps == -1 ? "0" : Game.lumps} sugar lumps`
+				arr[1] = Game.lumps == -1 ? "No sugar lumps growing" : `Growing a ${DRP.lumpType(Game.lumpCurrentType)} lump`
+				break;
+			case 2: //show click info
+				arr[0] = `${DRP.nFormat(Game.cookieClicks)} clicks`
+				arr[1] = `${DRP.nFormat(Game.computedMouseCps)} per click`
+				break;
+			case 3: //show golden cookie info
+				arr[0] = `${DRP.nFormat(Game.goldenClicks)} Golden Cookies clicked`
+				arr[1] = `${DRP.nFormat(Game.missedGoldenClicks)} Golden Cookies missed`
+				break;
+			case 4: //show season info
+				arr[0] = `Season: ${DRP.getSeasonName(Game.season)}`
+				arr[1] = `${DRP.getDrops(Game.season)}`
+				break;
+			case 5:	//show cookie info
+				arr[0] = `${DRP.nFormat(Game.cookies, DRP.config.COOKIES_LONG_SCALE)} cookies`
+				arr[1] = `${DRP.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), DRP.config.COOKIES_LONG_SCALE)} per second`
+				break;
+		}
+
+		return arr;
+	}
+
+	DRP.getScale = function(index)
 	{
 		longScale = [
 			'',
@@ -176,10 +211,10 @@ RPC.launch = function()
 			'Quattuorvigint',
 		];
 
-		return RPC.config.USE_LONG_SCALE ? longScale[index] : shortScale[index];
+		return DRP.config.USE_LONG_SCALE ? longScale[index] : shortScale[index];
 	}
 
-	RPC.nFormat = function(num)
+	DRP.nFormat = function(num)
 	{
 		let val;
 
@@ -190,13 +225,13 @@ RPC.launch = function()
 			const exponential = num.toExponential().toString();
 			const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
 			val = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
-			val += " " + RPC.getScale(AmountOfTenPowerThree);
+			val += " " + DRP.getScale(AmountOfTenPowerThree);
 		}
 
 		return val;
 	}
 
-	RPC.getDrops = function(season)
+	DRP.getDrops = function(season)
 	{
 		switch(season)
 		{
@@ -217,7 +252,7 @@ RPC.launch = function()
 		}
 	}
 
-	RPC.lumpType = function(type)
+	DRP.lumpType = function(type)
 	{
 		switch(type)
 		{
@@ -233,8 +268,8 @@ RPC.launch = function()
 				return "caramelized";
 		}
 	}
-	
-	RPC.getSeasonName = function(season)
+
+	DRP.getSeasonName = function(season)
 	{
 		switch(season)
 		{
@@ -251,7 +286,7 @@ RPC.launch = function()
 		}
 	}
 
-	RPC.smallIconSettingText = function(mode)
+	DRP.smallIconSettingText = function(mode)
 	{
 		switch(mode)
 		{
@@ -267,24 +302,24 @@ RPC.launch = function()
 				return "Show Current Season Info"
 			case 5:
 				return "Show Bank and CPS Info"
+			case 6:
+				return "Cycle Through All Info"
 		}
 	}
 
 	//INIT MOD
-	if(CCSE.ConfirmGameVersion(RPC.name, RPC.version, RPC.gameVersion))
-	{
-		Game.registerMod(RPC.id, RPC);
-	}
+	if(CCSE.ConfirmGameVersion(DRP.name, DRP.version, DRP.gameVersion))
+		Game.registerMod(DRP.id, DRP);
 };
 
-if(!RPC.isLoaded)
+if(!DRP.isLoaded)
 {
-	if(CCSE && CCSE.isLoaded) RPC.launch();
+	if(CCSE && CCSE.isLoaded) DRP.launch();
 
 	else
 	{
 		if(!CCSE) var CCSE = {};
 		if(!CCSE.postLoadHooks) CCSE.postLoadHooks = [];
-		CCSE.postLoadHooks.push(RPC.launch);
+		CCSE.postLoadHooks.push(DRP.launch);
 	}
 }

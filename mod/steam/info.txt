@@ -2,10 +2,10 @@
 	"Name": "Discord Rich Presence+",
 	"ID": "drpplus",
 	"Author": "Angelolz",
-	"Description": "Allows you to show different info in your Rich Presence other than your Bank and CPS.",
-	"ModVersion": 2.043,
+	"ModVersion": 1.1,
+	"Description": "Changes Rich Presence updates to 10 seconds instead of 30 seconds, as well as allowing you to show (or cycle through) different info in your Rich Presence other than your Bank and CPS.",
 	"GameVersion": 2.043,
-	"Date": "12/25/2021",
+	"Date": "01/05/2022",
 	"Dependencies": ["CCSE"],
 	"Disabled": 1,
 	"AllowSteamAchievs": 1
