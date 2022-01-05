@@ -84,7 +84,7 @@ DRP.launch = function()
 		str =
 			'<div class="listing">' +
 			m.ActionButton("DRP.config.MODE == 6 ? DRP.config.MODE = 0 : DRP.config.MODE++; Game.UpdateMenu();", DRP.smallIconSettingText(DRP.config.MODE)) +
-			'<label>Toggle what information is displayed for the small icon of your Rich Presence.</label><br>' +
+			'<label>Toggle what information is displayed for the status of your Rich Presence.</label><br>' +
 			m.ToggleButton(DRP.config, 'USE_LONG_SCALE', "DRP_USE_LONG_SCALE", "Long Scale", "Short Scale", "DRP.toggle") +
 			'<label>Change the scale setting in the Rich Presence (ex. Quattordec or Quattordecillion).</label><br>' +
 			'</div>';
