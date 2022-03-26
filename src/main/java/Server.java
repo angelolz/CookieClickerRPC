@@ -1,5 +1,5 @@
+import club.minnced.discord.rpc.DiscordRPC;
 import com.google.gson.Gson;
-import net.arikia.dev.drpc.DiscordRPC;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -26,7 +26,7 @@ public class Server extends WebSocketServer
     public void onClose(WebSocket conn, int code, String reason, boolean remote)
     {
         Main.getLogger().info("Closed connection with Cookie Clicker and stopped Rich Presence status.");
-        DiscordRPC.discordClearPresence();
+        DiscordRPC.INSTANCE.Discord_ClearPresence();
         Main.setStartTime(System.currentTimeMillis());
     }
 
