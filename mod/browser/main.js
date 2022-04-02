@@ -15,7 +15,7 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 DRP.name = "Rich Presence";
 DRP.id = "drpbrowser";
 DRP.author = "Angelolz";
-DRP.version = "v1.1";
+DRP.version = "v1.2";
 DRP.gameVersion = "2.031";
 
 DRP.launch = function()
@@ -99,7 +99,6 @@ DRP.launch = function()
 			DRP.wsCon = true;
 			Game.registerHook('check', sendData);
 			Game.Notify("Started Rich Presence Server!", `${DRP.version}`, [5,5], 6, false);
-			Game.Notify("New Update!", "Your Rich Presence client may be outdated! Click <a href='https://github.com/angelolz1/CookieClickerRPC/releases' target='_blank'>here</a> to update it!", [1,7]);
 		}
 
 		DRP.ws.onclose = function (event) {if(DRP.wsCon) { lostConnection(); }}
