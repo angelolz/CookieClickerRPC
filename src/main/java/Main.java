@@ -4,18 +4,19 @@ import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import net.arikia.dev.drpc.DiscordEventHandlers;
-import net.arikia.dev.drpc.DiscordRPC;
-import net.arikia.dev.drpc.DiscordRichPresence;
+import club.minnced.discord.rpc.DiscordEventHandlers;
+import club.minnced.discord.rpc.DiscordRPC;
+import club.minnced.discord.rpc.DiscordRichPresence;
 import org.java_websocket.server.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main
 {
+    private static DiscordRPC lib;
     private static Logger logger;
     private static long startTime;
-    private final static String version = "v1.1";
+    private final static String version = "v1.2";
     public static boolean warned = false;
 
     public static void main(String[] args)
@@ -23,14 +24,15 @@ public class Main
         logger = LoggerFactory.getLogger(Main.class);
         logger.info("Cookie Clicker - Discord Rich Presence {}", version);
 
-        DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
-            .setReadyEventHandler((user) -> {
+        lib = DiscordRPC.INSTANCE;
+        DiscordEventHandlers handlers = new DiscordEventHandlers();
+        handlers.ready = (user) -> {
                 logger.info("Welcome, {}#{}! Started Discord Rich Presence instance.", user.username, user.discriminator);
                 logger.info("Your Rich Presence will show once the Cookie Clicker mod is loaded.");
-            })
-            .build();
-        DiscordRPC.discordInitialize("895895624891895828", handlers, true);
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(DiscordRPC::discordRunCallbacks, 0, 1, TimeUnit.SECONDS);
+            };
+        lib.Discord_Initialize("895895624891895828", handlers, true, "");
+
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> lib.Discord_RunCallbacks(), 0, 1, TimeUnit.SECONDS);
 
         startTime = System.currentTimeMillis();
 
@@ -58,39 +60,54 @@ public class Main
 
     public static void updateRichPresence(CookieData c)
     {
-        DiscordRichPresence.Builder rp = new DiscordRichPresence
-            .Builder(c.cps + " per second")
-            .setDetails(c.cookies + " cookies")
-            .setBigImage("icon", "Rich Presence by Angelolz");
+        DiscordRichPresence presence = new DiscordRichPresence();
+        presence.state = c.cps + " per second";
+        presence.details = c.cookies + " cookies";
 
-        if(c.config.show_elapsed_time == 1) rp.setStartTimestamps(startTime);
+        presence.largeImageKey = "icon";
+        presence.largeImageText = "Rich Presence by Angelolz";
+
+        if(c.config.show_elapsed_time == 1) presence.startTimestamp = startTime;
 
         switch(c.config.small_icon_mode)
         {
             case 0:
-                rp.setSmallImage("legacy", String.format("Prestige Lv. %s with %s ascends", c.prestige_lvl, c.resets));
+                presence.smallImageKey = "legacy";
+                presence.smallImageText = String.format("Prestige Lv. %s with %s ascends", c.prestige_lvl, c.resets);
                 break;
             case 1:
                 if(c.lumps.equals("-1"))
-                    rp.setSmallImage("normal", "Not growing any sugar lumps");
+                {
+                    presence.smallImageKey = "normal";
+                    presence.smallImageText = "Not growing any sugar lumps";
+                }
+
                 else
-                    rp.setSmallImage(c.lump_status, String.format("%s sugar lumps | Growing a %s lump", c.lumps, c.lump_status));
+                {
+                    presence.smallImageKey = c.lump_status;
+                    presence.smallImageText = String.format("%s sugar lumps | Growing a %s lump", c.lumps, c.lump_status);
+                }
                 break;
             case 2:
-                rp.setSmallImage("cursor", String.format("%s clicks | %s cookies per click", c.clicks, c.cookies_per_click));
+                presence.smallImageKey = "cursor";
+                presence.smallImageText = String.format("%s clicks | %s cookies per click", c.clicks, c.cookies_per_click);
                 break;
             case 3:
-                rp.setSmallImage("goldencookie", String.format("%s GCs clicked | %s GCs missed", c.gc_clicks, c.gc_missed));
+                presence.smallImageKey = "goldencookie";
+                presence.smallImageText = String.format("%s GCs clicked | %s GCs missed", c.gc_clicks, c.gc_missed);
                 break;
             case 4:
                 if(!c.season.isEmpty())
-                    rp.setSmallImage(c.season, String.format("%s | %s", c.season_name, c.drops));
+                {
+                    presence.smallImageKey = c.season;
+                    presence.smallImageText = String.format("%s | %s", c.season_name, c.drops);
+                }
                 break;
             case 5:
                 break;
         }
 
-        DiscordRPC.discordUpdatePresence(rp.build());
+        lib.Discord_UpdatePresence(presence);
     }
 
     public static void setStartTime(long startTime) { Main.startTime = startTime; }
