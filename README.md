@@ -7,15 +7,18 @@ You can download this mod at the Steam Workshop **[here](https://steamcommunity.
 Unfortunately, you won't be able to have a small icon like the browser version of the mod does, but it does allow you to
 cycle through all the possible information that the mod provides :)
 
+*Note: Linux and macOS compatibility is not tested, as Cookie Clicker does not support these platforms.*
+
 ## Installation (Browser)
 ### Requirements
 - [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
 
 ### Running the program
+
 **Windows**
 - Just launch the executable program!
 
-**macOS / Linux**
+**macOS/Linux**
 - Open a terminal and navigate to where the jar file is stored using the `cd` command.
 - Type the command: `java -jar *.jar`.
 
@@ -23,7 +26,7 @@ Upon running the program, it should automatically open the Cookie Clicker websit
 
 Copy this code and save it as a bookmark.
 ```javascript
-javascript: (function () {   Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
+javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
 ```
 
 If everything was installed correctly, you should see the below output and your rich presence on Discord!

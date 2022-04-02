@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>F:\Desktop\CodeProjects\java\personal\CookieClickerRPC\target\CookieClickerRPC-1.1.jar</jar>
-  <outfile>F:\Desktop\CookieClickerRPC-Windows-1.1.exe</outfile>
+  <jar>F:\Desktop\CodeProjects\java\personal\CookieClickerRPC\target\CookieClickerRPC-1.2.jar</jar>
+  <outfile>F:\Desktop\CookieClickerRPC-Windows-1.2.exe</outfile>
   <errTitle>Cookie Clicker Rich Presence Mod</errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
