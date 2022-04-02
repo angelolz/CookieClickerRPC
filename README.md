@@ -26,7 +26,7 @@ Upon running the program, it should automatically open the Cookie Clicker websit
 
 Copy this code and save it as a bookmark.
 ```javascript
-javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
+javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js?v=1.2'); }());
 ```
 
 If everything was installed correctly, you should see the below output and your rich presence on Discord!
