@@ -16,7 +16,7 @@ public class Main
     private static DiscordRPC lib;
     private static Logger logger;
     private static long startTime;
-    private final static String version = "v1.2";
+    private final static String version = "v1.2.1";
     public static boolean warned = false;
 
     public static void main(String[] args)

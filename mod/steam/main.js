@@ -16,8 +16,8 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 DRP.name = "Rich Presence+";
 DRP.id = "drpplus";
 DRP.author = "Angelolz";
-DRP.version = "v1.1";
-DRP.gameVersion = "2.043";
+DRP.version = "v1.1.1";
+DRP.gameVersion = "2.048";
 
 //other global vars
 var cycleIndex = -1;

@@ -15,8 +15,8 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 DRP.name = "Rich Presence";
 DRP.id = "drpbrowser";
 DRP.author = "Angelolz";
-DRP.version = "v1.2";
-DRP.gameVersion = "2.031";
+DRP.version = "v1.2.1";
+DRP.gameVersion = "2.048";
 
 DRP.launch = function()
 {
