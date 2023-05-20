@@ -51,9 +51,7 @@ public class Server extends WebSocketServer
     }
 
     @Override
-    public void onMessage( WebSocket conn, ByteBuffer message ) {
-        System.out.println("received ByteBuffer from "	+ conn.getRemoteSocketAddress());
-    }
+    public void onMessage( WebSocket conn, ByteBuffer message ) {}
 
     @Override
     public void onError(WebSocket conn, Exception ex)

@@ -1,41 +1,56 @@
 /*jshint esversion: 8 */
-//if attempting to load the mod on the web version (this one is more common than the other way around)
-if(typeof Steam == 'object')
-{
-	Game.Notify("Wrong DRP+ version!", "The mod you're using for Discord Rich " +
-		"Presence+ is meant for <b>browsers only</b>. Please download the one for " +
-		`Steam <a ${Game.clickStr}="Steam.openLink('https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340')">here</a>!`, [1,7])
-	throw new Error("The mod was not loaded. This mod was meant for the browser version.")
-}
-
 if(DRP === undefined) var DRP = {};
 if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieClicker/CCSE.js');
 
 //mod info
 DRP.name = "Rich Presence";
-DRP.id = "drpbrowser";
-DRP.author = "Angelolz";
-DRP.version = "v1.2.1";
-DRP.gameVersion = "2.048";
+DRP.id = "angelolz.drp";
+DRP.author = "angelolz";
+DRP.version = "v1.3";
+DRP.gameVersion = "2.052";
+
+//other global vars
+let cycleIndex = -1;
+let notified = false; //for the steam update notif to not show twice lol
 
 DRP.launch = function()
 {
-	DRP.defaultConfig = function()
-	{
-		return {
-			PRESTIGE_LONG_SCALE: 1,
-			COOKIES_LONG_SCALE: 0,
-			SHOW_ELAPSED_TIME: 1,
-			SMALL_ICON_MODE: 2
-		}
+	DRP.defaultConfig = {
+		PRESTIGE_LONG_SCALE: 1,
+		COOKIES_LONG_SCALE: 0,
+		SHOW_ELAPSED_TIME: 1,
+		SMALL_ICON_MODE: 2,
+		SHOW_GUIDE: 1
 	}
 
-	// initialize config
-	DRP.config = DRP.defaultConfig();
+	//initialize config
+	DRP.config = DRP.defaultConfig;
 
 	// save/load mod settings
 	DRP.save = function() { return JSON.stringify(DRP.config); }
-	DRP.load = function(str) { DRP.config = JSON.parse(str); }
+	DRP.load = function(str) {
+		const settings = JSON.parse(str);
+
+		//add new properties that don't exist in current settings
+		Object.keys(DRP.defaultConfig).forEach(k => {
+			if (!settings.hasOwnProperty(k))
+				settings[k] = DRP.defaultConfig[k];
+		});
+
+		//delete properties in old settings that don't exist in default settings
+		Object.keys(settings).forEach(k => {
+			if(!DRP.defaultConfig.hasOwnProperty(k))
+				delete settings[k];
+		})
+
+		DRP.config = settings;
+
+		if(DRP.config.SHOW_GUIDE === 1 && !notified && typeof Steam == 'object') {
+			Game.Notify("DRP+ has been updated!", `Please <a href='https://steamcommunity.com/sharedfiles/filedetails/?id=2633184601' " +
+\t\t"target='_blank'>read the guide</a> to enable rich presence. Disable this notice in the settings.`, [5,5], 0, true);
+			notified = true;
+		}
+	}
 
 	DRP.init = function()
 	{
@@ -65,8 +80,15 @@ DRP.launch = function()
 			m.ToggleButton(DRP.config, 'COOKIES_LONG_SCALE', "RPC_COOKIES_LONG_SCALE", "Long Scale for Cookie Info", "Short Scale for Cookie Info", "DRP.toggle") +
 			'<label>Change the scale setting for the Total Cookies and CPS.</label><br>' +
 			m.ToggleButton(DRP.config, 'SHOW_ELAPSED_TIME', "RPC_SHOW_ELAPSED_TIME", "Elapsed Time ON", "Elapsed Time OFF", "DRP.toggle") +
-			'<label>Toggle display for how long you\'ve been playing this session.</label>' +
-			'</div>';
+			'<label>Toggle display for how long you\'ve been playing this session.</label>';
+
+		if(typeof Steam == 'object') {
+			str += '<br>' +
+				m.ToggleButton(DRP.config, 'SHOW_GUIDE', "RPC_SHOW_GUIDE", "Show Steam Guide ON", "Show Steam Guide OFF", "DRP.toggle") +
+				'<label>Display the link to the Steam guide when the game is launched </label>';
+		}
+
+		str += '</div>';
 
 		return str;
 	}
@@ -116,9 +138,10 @@ DRP.launch = function()
 		!!!NOTE!!!: DRP.getScale and DRP.nFormat are functions that are from the
 		Cookie Monster Mod, but are slightly modified. I appreciate the team behind the CM mod.
 	*/
+
 	DRP.getScale = function(index, useLong)
 	{
-		longScale = [
+		const longScale = [
 			'',
 			'',
 			'Million',
@@ -147,7 +170,7 @@ DRP.launch = function()
 			'Quattuorvigintillion',
 		];
 
-		shortScale = [
+		const shortScale = [
 			'',
 			'',
 			'M',
@@ -188,9 +211,9 @@ DRP.launch = function()
 		else
 		{
 			const exponential = num.toExponential().toString();
-			const AmountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
-			val = (num / Number(`1e${AmountOfTenPowerThree * 3}`)).toFixed(3);
-			val += " " + DRP.getScale(AmountOfTenPowerThree, useLong);
+			const amountOfTenPowerThree = Math.floor(exponential.slice(exponential.indexOf('e') + 1) / 3);
+			val = (num / Number(`1e${amountOfTenPowerThree * 3}`)).toFixed(3);
+			val += " " + DRP.getScale(amountOfTenPowerThree, useLong);
 		}
 
 		return val;
@@ -249,7 +272,7 @@ DRP.launch = function()
 			case "valentines":
 				return Game.seasons.valentines.name
 			default:
-				return "None"
+				return "None";
 		}
 	}
 
@@ -258,13 +281,13 @@ DRP.launch = function()
 		switch(mode)
 		{
 			case 0:
-				return "Show Prestige Info";
+				return "Show Prestige Info"
 			case 1:
-				return "Show Sugar Lump Info";
+				return "Show Sugar Lump Info"
 			case 2:
-				return "Show Clicks Info";
+				return "Show Clicks Info"
 			case 3:
-				return "Show Golden Cookie Info";
+				return "Show Golden Cookie Info"
 			case 4:
 				return "Show Current Season Info"
 			case 5:
@@ -289,7 +312,7 @@ if(!DRP.isLoaded)
 	}
 }
 
-// websocket functions
+//websocket functions
 function sendData()
 {
 	DRP.ws.send(
@@ -312,7 +335,8 @@ function sendData()
 				prestige_long_scale: ${DRP.config.PRESTIGE_LONG_SCALE},
 				cookies_long_scale: ${DRP.config.COOKIES_LONG_SCALE},
 				show_elapsed_time: ${DRP.config.SHOW_ELAPSED_TIME},
-				small_icon_mode: ${DRP.config.SMALL_ICON_MODE}
+				small_icon_mode: ${DRP.config.SMALL_ICON_MODE},
+				show_guide: ${DRP.config.SHOW_GUIDE}
 			}
 		}`);
 }

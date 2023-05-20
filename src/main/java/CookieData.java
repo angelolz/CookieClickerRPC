@@ -6,6 +6,7 @@ public class CookieData
         int cookies_long_scale;
         int show_elapsed_time;
         int small_icon_mode;
+        int show_guide;
     }
 
     String version;
