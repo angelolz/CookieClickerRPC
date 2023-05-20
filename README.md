@@ -10,6 +10,8 @@ You can download this mod at the Steam Workshop **[here](https://steamcommunity.
 *Note: Linux and macOS compatibility is not tested, as Cookie Clicker does not support these platforms.*
 
 ## Installation (Browser)
+### Requirements
+- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
 
 ### Running the program
 
@@ -24,6 +26,8 @@ Copy this code and save it as a bookmark.
 ```javascript
 javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js?v1.3'); }());
 ```
+
+*Note: you would have to do this every time you reload the Cookie Clicker page.*
 
 If everything was installed correctly, you should see the below output and your rich presence on Discord!
 ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
