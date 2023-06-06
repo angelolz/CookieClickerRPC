@@ -32,8 +32,14 @@ javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js
 If everything was installed correctly, you should see the below output and your rich presence on Discord!
 ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
 
+# Troubleshooting
+### "App closes instantly when I run the app"
+This is probably because the app is trying to find a Java Runtime Environment and can't find one. Follow the steps for 
+Windows in [this site](https://www.geeksforgeeks.org/how-to-set-java-path-in-windows-and-linux/) to set Java in your `PATH` system variable.
+
 # Bugs/Feedback
-There are times when I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
+There are times when I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I 
+don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
 
 # Dependencies Used:
 - [Vatuu/discord-rpc](https://github.com/Vatuu/discord-rpc) for the Java implementation of Rich Presence
