@@ -1,11 +1,11 @@
 # Cookie Clicker Rich Presence Creator
-This Cookie Clicker mod will allow you to share your game stats with everyone on Discord!
+This Cookie Clicker mod allows you to share your game stats with everyone on Discord!
+### Requirements
+- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
 
 
 ## Mod Installation (Steam)
 You can download this mod at the Steam Workshop **[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340)**.
-Unfortunately, you won't be able to have a small icon like the browser version of the mod does, but it does allow you to
-cycle through all the possible information that the mod provides :)
 
 *Note: Linux and macOS compatibility is not tested, as Cookie Clicker does not support these platforms.*
 
@@ -22,18 +22,24 @@ cycle through all the possible information that the mod provides :)
 - Open a terminal and navigate to where the jar file is stored using the `cd` command.
 - Type the command: `java -jar *.jar`.
 
-Upon running the program, it should automatically open the Cookie Clicker website for you.
-
 Copy this code and save it as a bookmark.
 ```javascript
-javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js'); }());
+javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js?v1.3'); }());
 ```
+
+*Note: you would have to do this every time you reload the Cookie Clicker page.*
 
 If everything was installed correctly, you should see the below output and your rich presence on Discord!
 ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
 
+# Troubleshooting
+### "App closes instantly when I run the app"
+This is probably because the app is trying to find a Java Runtime Environment and can't find one. Follow the steps for 
+Windows in [this site](https://www.geeksforgeeks.org/how-to-set-java-path-in-windows-and-linux/) to set Java in your `PATH` system variable.
+
 # Bugs/Feedback
-There are times where I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
+There are times when I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I 
+don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
 
 # Dependencies Used:
 - [Vatuu/discord-rpc](https://github.com/Vatuu/discord-rpc) for the Java implementation of Rich Presence

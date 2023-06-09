@@ -40,8 +40,10 @@ public class Server extends WebSocketServer
 
         if(!Main.warned && !c.version.equalsIgnoreCase(Main.getVersion()))
         {
+            Main.getLogger().warn("--------------------------------------------");
             Main.getLogger().warn("Your client is out of date. Please update to the new version by visiting");
             Main.getLogger().warn("https://github.com/angelolz1/CookieClickerRPC/releases");
+            Main.getLogger().warn("--------------------------------------------");
             Main.warned = true;
         }
 
@@ -49,9 +51,7 @@ public class Server extends WebSocketServer
     }
 
     @Override
-    public void onMessage( WebSocket conn, ByteBuffer message ) {
-        System.out.println("received ByteBuffer from "	+ conn.getRemoteSocketAddress());
-    }
+    public void onMessage( WebSocket conn, ByteBuffer message ) {}
 
     @Override
     public void onError(WebSocket conn, Exception ex)

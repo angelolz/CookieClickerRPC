@@ -1,6 +1,4 @@
-import java.awt.*;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -16,17 +14,17 @@ public class Main
     private static DiscordRPC lib;
     private static Logger logger;
     private static long startTime;
-    private final static String version = "v1.2";
+    private static final String VERSION = "v1.3";
     public static boolean warned = false;
 
     public static void main(String[] args)
     {
         logger = LoggerFactory.getLogger(Main.class);
-        logger.info("Cookie Clicker - Discord Rich Presence {}", version);
+        logger.info("Cookie Clicker - Discord Rich Presence {}", VERSION);
 
         lib = DiscordRPC.INSTANCE;
         DiscordEventHandlers handlers = new DiscordEventHandlers();
-        handlers.ready = (user) -> {
+        handlers.ready = user -> {
                 logger.info("Welcome, {}#{}! Started Discord Rich Presence instance.", user.username, user.discriminator);
                 logger.info("Your Rich Presence will show once the Cookie Clicker mod is loaded.");
             };
@@ -36,27 +34,13 @@ public class Main
 
         startTime = System.currentTimeMillis();
 
-        logger.info("Attempting to open Cookie Clicker website...");
-        try
-        {
-            Desktop d = Desktop.getDesktop();
-            d.browse(new URI("https://orteil.dashnet.org/cookieclicker/"));
-            logger.info("Opened website.");
-        }
-
-        catch(Exception e)
-        {
-            logger.error("Unable to open Cookie Clicker website. Please manually open the Cookie Clicker website in your browser.");
-            logger.debug("Error: {}", e.getMessage());
-        }
-
         WebSocketServer server = new Server(new InetSocketAddress("localhost", 6969));
         server.run();
     }
 
     public static Logger getLogger() { return logger; }
 
-    public static String getVersion() { return version; }
+    public static String getVersion() { return VERSION; }
 
     public static void updateRichPresence(CookieData c)
     {
@@ -65,7 +49,7 @@ public class Main
         presence.details = c.cookies + " cookies";
 
         presence.largeImageKey = "icon";
-        presence.largeImageText = "Rich Presence by Angelolz";
+        presence.largeImageText = "Rich Presence by angelolz";
 
         if(c.config.show_elapsed_time == 1) presence.startTimestamp = startTime;
 
