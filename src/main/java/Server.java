@@ -47,7 +47,7 @@ public class Server extends WebSocketServer
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
 
-        if(!outdatedVersionWarned && !c.version.equalsIgnoreCase(Main.getVersion()))
+        if(!outdatedVersionWarned && !c.version.equalsIgnoreCase("v" + Main.getVersion()))
         {
             LoggerManager.getLogger().warn("--------------------------------------------");
             LoggerManager.getLogger().warn("This app is out of date. Please update to the new version by visiting");
