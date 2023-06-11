@@ -5,7 +5,7 @@
 	"ModVersion": 1.3,
 	"Description": "Show your personal stats from Cookie Clicker in Discord!",
 	"GameVersion": 2.052,
-	"Date": "Jun/8/2023",
+	"Date": "June/8/2023",
 	"Dependencies": ["CCSE"],
 	"Disabled": 1,
 	"AllowSteamAchievs": 1
