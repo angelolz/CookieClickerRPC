@@ -12,9 +12,9 @@ public class Server extends WebSocketServer
     private WebSocket overlayWebSocket;
     private boolean outdatedVersionWarned;
 
-    public Server(InetSocketAddress address)
+    public Server()
     {
-        super(address);
+        super(new InetSocketAddress("localhost", 6969));
         outdatedVersionWarned = false;
     }
 
@@ -24,8 +24,8 @@ public class Server extends WebSocketServer
         if(conn.getResourceDescriptor().equals("/ws"))
             overlayWebSocket = conn;
 
-        Main.getLogger().info("Opened a connection with Cookie Clicker.");
-        Main.setStartTime(System.currentTimeMillis());
+        LoggerManager.getLogger().info("Opened a connection with Cookie Clicker.");
+        PresenceManager.setStartTime(System.currentTimeMillis());
     }
 
     @Override
@@ -34,29 +34,29 @@ public class Server extends WebSocketServer
         if(conn.getResourceDescriptor().equals("/ws"))
             overlayWebSocket = null;
 
-        Main.getLogger().info("Closed connection with Cookie Clicker and stopped Rich Presence status.");
+        LoggerManager.getLogger().info("Closed connection with Cookie Clicker and stopped Rich Presence status.");
         DiscordRPC.INSTANCE.Discord_ClearPresence();
-        Main.setStartTime(System.currentTimeMillis());
+        PresenceManager.setStartTime(System.currentTimeMillis());
     }
 
     @Override
     public void onMessage(WebSocket conn, String text)
     {
-        Main.getLogger().debug("message:\n{}", text);
+        LoggerManager.getLogger().debug("message:\n{}", text);
 
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
 
         if(!outdatedVersionWarned && !c.version.equalsIgnoreCase(Main.getVersion()))
         {
-            Main.getLogger().warn("--------------------------------------------");
-            Main.getLogger().warn("Your client is out of date. Please update to the new version by visiting");
-            Main.getLogger().warn("https://github.com/angelolz1/CookieClickerRPC/releases");
-            Main.getLogger().warn("--------------------------------------------");
+            LoggerManager.getLogger().warn("--------------------------------------------");
+            LoggerManager.getLogger().warn("This app is out of date. Please update to the new version by visiting");
+            LoggerManager.getLogger().warn("https://github.com/angelolz1/CookieClickerRPC/releases");
+            LoggerManager.getLogger().warn("--------------------------------------------");
             outdatedVersionWarned = true;
         }
 
-        Main.updateRichPresence(c);
+        PresenceManager.updateRichPresence(c);
 
         if(overlayWebSocket != null)
             overlayWebSocket.send(text);
@@ -68,12 +68,12 @@ public class Server extends WebSocketServer
     @Override
     public void onError(WebSocket conn, Exception ex)
     {
-        Main.getLogger().error("Error on connection {} : {}", conn.getRemoteSocketAddress(), ex);
+        LoggerManager.getLogger().error("Error on connection {} : {}", conn.getRemoteSocketAddress(), ex.getMessage());
     }
 
     @Override
     public void onStart()
     {
-        Main.getLogger().info("Server successfully started.");
+        LoggerManager.getLogger().info("Server successfully started.");
     }
 }

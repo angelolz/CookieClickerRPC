@@ -6,7 +6,7 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 DRP.name = "Rich Presence";
 DRP.id = "angelolz.drp";
 DRP.author = "angelolz";
-DRP.version = "v1.3";
+DRP.version = "v1.3.1";
 DRP.gameVersion = "2.052";
 
 //other global vars
