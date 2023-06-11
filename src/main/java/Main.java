@@ -4,7 +4,6 @@ import org.java_websocket.server.WebSocketServer;
 
 public class Main
 {
-
     private static final String VERSION = "1.3.1";
 
     public static void main(String[] args)

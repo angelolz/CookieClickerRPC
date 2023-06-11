@@ -3,28 +3,16 @@ This Cookie Clicker mod allows you to share your game stats with everyone on Dis
 ### Requirements
 - [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
 
-
 ## Mod Installation (Steam)
 You can download this mod at the Steam Workshop **[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340)**.
 
 *Note: Linux and macOS compatibility is not tested, as Cookie Clicker does not support these platforms.*
 
-## Installation (Browser)
-### Requirements
-- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
+## Mod Installation (Browser)
 
-### Running the program
-
-**Windows**
-- Just launch the executable program!
-
-**macOS/Linux**
-- Open a terminal and navigate to where the jar file is stored using the `cd` command.
-- Type the command: `java -jar *.jar`.
-
-Copy this code and save it as a bookmark.
+Put this code in the javascript console:
 ```javascript
-javascript: (function () { Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js?v1.3'); }());
+Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js?v1.3.1');
 ```
 
 *Note: you would have to do this every time you reload the Cookie Clicker page.*
@@ -54,3 +42,7 @@ MIT
 Cookie Clicker and its icons are owned by Orteil. Thank you Orteil for creating such an amazing game!
 
 If you want to support me for my work, feel free to give me a [Ko-Fi](https://ko-fi.com/angelolz)!
+
+### Streamers!
+Hey, if you like Cookie Clicker and you are a streamer, I've made a new stream widget that displays your cookie stats 
+[here](https://github.com/angelolz1/cc-stream-overlay)! Check it out :)
