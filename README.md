@@ -12,7 +12,7 @@ You can download this mod at the Steam Workshop **[here](https://steamcommunity.
 
 Put this code in the javascript console:
 ```javascript
-Game.LoadMod('https://angelolz.dev/mods/ccrpc/main.js?v1.3.1');
+Game.LoadMod('https://ccrpc.angelolz.one');
 ```
 
 *Note: you would have to do this every time you reload the Cookie Clicker page.*
