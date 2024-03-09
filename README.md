@@ -1,7 +1,7 @@
 # Cookie Clicker Rich Presence Creator
 This Cookie Clicker mod allows you to share your game stats with everyone on Discord!
 ### Requirements
-- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
+- [Java 17](https://www.oracle.com/java/technologies/downloads/#java17)
 
 ## Mod Installation (Steam)
 You can download this mod at the Steam Workshop **[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340)**.
