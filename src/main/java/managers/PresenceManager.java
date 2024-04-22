@@ -30,8 +30,8 @@ public class PresenceManager
 
     public static void updateRichPresence(CookieData cookieData) throws UnsupportedOperationException
     {
-        if(rpc == null)
-            throw new UnsupportedOperationException("Discord Rich Presence isn't initialized yet!");
+        //rich presence isn't initialized yet
+        if(rpc == null) return;
 
         DiscordRichPresence presence = new DiscordRichPresence();
         presence.state = cookieData.getCookiesPerSecond() + " per second";

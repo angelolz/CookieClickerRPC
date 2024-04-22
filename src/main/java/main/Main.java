@@ -18,13 +18,18 @@ public class Main
     {
         LoggerManager.init();
         LoggerManager.getLogger().info("Cookie Clicker - Discord Rich Presence v{}", VERSION);
-
-        ConfigManager.init();
-        PresenceManager.init();
-        openCookieClicker();
-
         WebSocketServer server = new Server();
-        server.run();
+
+        try {
+            ConfigManager.init();
+            PresenceManager.init();
+            server.run();
+            openCookieClicker();
+        }
+
+        catch (Exception e) {
+            LoggerManager.getLogger().error("Couldn't start Rich Presence, maybe another instance is already open?");
+        }
     }
 
     public static String getVersion() { return VERSION; }
