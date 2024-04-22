@@ -1,7 +1,7 @@
 # Cookie Clicker Rich Presence Creator
 This Cookie Clicker mod allows you to share your game stats with everyone on Discord!
 ### Requirements
-- [Java 8](https://java.com/en/download/) (or higher, although the exe might prompt you to install Java 8 for some reason)
+- [Java 17](https://www.oracle.com/java/technologies/downloads/#java17)
 
 ## Mod Installation (Steam)
 You can download this mod at the Steam Workshop **[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340)**.
@@ -21,13 +21,19 @@ If everything was installed correctly, you should see the below output and your 
 ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
 
 # Troubleshooting
-### "App closes instantly when I run the app"
+### "App closes instantly when I run it"
 This is probably because the app is trying to find a Java Runtime Environment and can't find one. Follow the steps for 
 Windows in [this site](https://www.geeksforgeeks.org/how-to-set-java-path-in-windows-and-linux/) to set Java in your `PATH` system variable.
 
+If that doesn't work, you may need to use the `.jar` version. To use it, follow these steps:
+1) Download the `.jar` file and open up a terminal/command prompt.
+2) Navigate to the folder the `.jar` file is downloaded in using the `cd` command.
+3) Use this command: `java -jar <name-of-jar-file>.jar` (no brackets)
+
+If the JAR shows an error and you can't figure out how to fix it, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues).
+
 # Bugs/Feedback
-There are times when I might've left a nasty bug in there, that's my bad! My JavaScript skills aren't the best, since I 
-don't have a lot of experience with it. With that said, if you do spot a bug or have any issues, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
+If you spot a bug or have any issues/suggestions, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
 
 # Dependencies Used:
 - [Vatuu/discord-rpc](https://github.com/Vatuu/discord-rpc) for the Java implementation of Rich Presence
