@@ -1,5 +1,10 @@
+package main;
+
 import club.minnced.discord.rpc.DiscordRPC;
 import com.google.gson.Gson;
+import managers.LoggerManager;
+import managers.PresenceManager;
+import objs.CookieData;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -47,7 +52,7 @@ public class Server extends WebSocketServer
         Gson gson = new Gson();
         CookieData c = gson.fromJson(text, CookieData.class);
 
-        if(!outdatedVersionWarned && !c.version.equalsIgnoreCase("v" + Main.getVersion()))
+        if(!outdatedVersionWarned && !c.getVersion().equalsIgnoreCase("v" + Main.getVersion()))
         {
             LoggerManager.getLogger().warn("--------------------------------------------");
             LoggerManager.getLogger().warn("This app is out of date. Please update to the new version by visiting");

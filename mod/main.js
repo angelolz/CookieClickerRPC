@@ -6,7 +6,7 @@ if(typeof CCSE == 'undefined') Game.LoadMod('https://klattmose.github.io/CookieC
 DRP.name = "Rich Presence";
 DRP.id = "angelolz.drp";
 DRP.author = "angelolz";
-DRP.version = "v1.3.1";
+DRP.version = "v1.3.2";
 DRP.gameVersion = "2.052";
 
 //other global vars
@@ -319,24 +319,21 @@ function sendData()
 		`{
 			"version": "${DRP.version}",
 			"cookies": "${DRP.nFormat(Game.cookies, DRP.config.COOKIES_LONG_SCALE)}",
-			"cps":"${DRP.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), DRP.config.COOKIES_LONG_SCALE)}",
-			"prestige_lvl":"${DRP.nFormat(Game.prestige, DRP.config.PRESTIGE_LONG_SCALE)}",
+			"cookiesPerSecond":"${DRP.nFormat(Game.cookiesPs * (1 - Game.cpsSucked), DRP.config.COOKIES_LONG_SCALE)}",
+			"prestigeLevel":"${DRP.nFormat(Game.prestige, DRP.config.PRESTIGE_LONG_SCALE)}",
 			"resets":"${Game.resets.toString()}",
 			"lumps":"${Game.lumps}",
-			"lump_status":"${DRP.lumpType(Game.lumpCurrentType)}",
+			"lumpStatus":"${DRP.lumpType(Game.lumpCurrentType)}",
 			"clicks":"${DRP.nFormat(Game.cookieClicks)}",
-			"cookies_per_click":"${DRP.nFormat(Game.computedMouseCps)}",
+			"cookiesPerClick":"${DRP.nFormat(Game.computedMouseCps)}",
 			"season":"${Game.season}",
-			"season_name":"${DRP.getSeasonName(Game.season)}",
+			"seasonName":"${DRP.getSeasonName(Game.season)}",
 			"drops":"${DRP.getDrops(Game.season)}",
-			"gc_clicks":"${DRP.nFormat(Game.goldenClicks)}",
-			"gc_missed":"${DRP.nFormat(Game.missedGoldenClicks)}",
+			"goldenCookiesClicked":"${DRP.nFormat(Game.goldenClicks)}",
+			"goldenCookiesMissed":"${DRP.nFormat(Game.missedGoldenClicks)}",
 			"config": {
-				"prestige_long_scale": ${DRP.config.PRESTIGE_LONG_SCALE},
-				"cookies_long_scale": ${DRP.config.COOKIES_LONG_SCALE},
-				"show_elapsed_time": ${DRP.config.SHOW_ELAPSED_TIME},
-				"small_icon_mode": ${DRP.config.SMALL_ICON_MODE},
-				"show_guide": ${DRP.config.SHOW_GUIDE}
+				"showElapsedTime": ${DRP.config.SHOW_ELAPSED_TIME},
+				"smallIconMode": ${DRP.config.SMALL_ICON_MODE},
 			}
 		}`);
 }
