@@ -1,38 +1,34 @@
-# Cookie Clicker Rich Presence Creator
+# Cookie Clicker Rich Presence Client
 This Cookie Clicker mod allows you to share your game stats with everyone on Discord!
 ### Requirements
-- [Java 17](https://www.oracle.com/java/technologies/downloads/#java17)
+- Java 1.8 or higher
 
 ## Mod Installation (Steam)
 You can download this mod at the Steam Workshop **[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2708959340)**.
 
-*Note: Linux and macOS compatibility is not tested, as Cookie Clicker does not support these platforms.*
-
 ## Mod Installation (Browser)
-
 Put this code in the javascript console:
 ```javascript
 Game.LoadMod('https://ccrpc.angelolz.one');
 ```
-
 *Note: you would have to do this every time you reload the Cookie Clicker page.*
+
+## Running the server
+### Windows
+- Download the Windows version of the latest release.
+- Run the `start_windows.bat` file.
+
+### Mac / Linux
+- Download the Mac/Linux version of the latest release.
+- Run the `start_mac_linux.sh` file. You may need to run it from terminal.
+- If the file isn't executable, you may need to use `chmod +x start_mac_linux.sh`.
+
 
 If everything was installed correctly, you should see the below output and your rich presence on Discord!
 ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
 
-# Troubleshooting
-### "App closes instantly when I run it"
-This is probably because the app is trying to find a Java Runtime Environment and can't find one. Follow the steps for 
-Windows in [this site](https://www.geeksforgeeks.org/how-to-set-java-path-in-windows-and-linux/) to set Java in your `PATH` system variable.
-
-If that doesn't work, you may need to use the `.jar` version. To use it, follow these steps:
-1) Download the `.jar` file and open up a terminal/command prompt.
-2) Navigate to the folder the `.jar` file is downloaded in using the `cd` command.
-3) Use this command: `java -jar <name-of-jar-file>.jar` (no brackets)
-
-If the JAR shows an error and you can't figure out how to fix it, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues).
-
 # Bugs/Feedback
+If the JAR shows an error, and you can't figure out how to fix it, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues).
 If you spot a bug or have any issues/suggestions, please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues)!
 
 # Dependencies Used:
@@ -46,7 +42,6 @@ MIT
 
 ---
 Cookie Clicker and its icons are owned by Orteil. Thank you Orteil for creating such an amazing game!
-
 If you want to support me for my work, feel free to give me a [Ko-Fi](https://ko-fi.com/angelolz)!
 
 ### Streamers!
