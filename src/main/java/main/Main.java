@@ -23,8 +23,8 @@ public class Main
         try {
             ConfigManager.init();
             PresenceManager.init();
-            server.run();
             openCookieClicker();
+            server.run();
         }
 
         catch (Exception e) {
