@@ -51,8 +51,7 @@ public class Server extends WebSocketServer
     {
         try
         {
-
-            LoggerManager.getLogger().info("message:\n{}", text);
+            LoggerManager.getLogger().debug("message:\n{}", text);
 
             Gson gson = new Gson();
             CookieData c = gson.fromJson(text, CookieData.class);
@@ -72,8 +71,10 @@ public class Server extends WebSocketServer
                 overlayWebSocket.send(text);
         }
 
-        catch(JsonSyntaxException e) {
-            if(!jsonParseErrorWarned) {
+        catch(JsonSyntaxException e)
+        {
+            if(!jsonParseErrorWarned)
+            {
                 jsonParseErrorWarned = true;
                 LoggerManager.getLogger().error("There was an error updating your status, please report this to the developer: {}", e.getMessage());
             }
