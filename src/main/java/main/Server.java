@@ -2,6 +2,7 @@ package main;
 
 import club.minnced.discord.rpc.DiscordRPC;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import managers.LoggerManager;
 import managers.PresenceManager;
 import objs.CookieData;
@@ -16,6 +17,7 @@ public class Server extends WebSocketServer
 {
     private WebSocket overlayWebSocket;
     private boolean outdatedVersionWarned;
+    private boolean jsonParseErrorWarned;
 
     public Server()
     {
@@ -47,28 +49,39 @@ public class Server extends WebSocketServer
     @Override
     public void onMessage(WebSocket conn, String text)
     {
-        LoggerManager.getLogger().debug("message:\n{}", text);
-
-        Gson gson = new Gson();
-        CookieData c = gson.fromJson(text, CookieData.class);
-
-        if(!outdatedVersionWarned && !c.getVersion().equalsIgnoreCase("v" + Main.getVersion()))
+        try
         {
-            LoggerManager.getLogger().warn("--------------------------------------------");
-            LoggerManager.getLogger().warn("This app is out of date. Please update to the new version by visiting");
-            LoggerManager.getLogger().warn("https://github.com/angelolz1/CookieClickerRPC/releases");
-            LoggerManager.getLogger().warn("--------------------------------------------");
-            outdatedVersionWarned = true;
+
+            LoggerManager.getLogger().info("message:\n{}", text);
+
+            Gson gson = new Gson();
+            CookieData c = gson.fromJson(text, CookieData.class);
+
+            if(!outdatedVersionWarned && !c.getVersion().equalsIgnoreCase("v" + Main.getVersion()))
+            {
+                LoggerManager.getLogger().warn("--------------------------------------------");
+                LoggerManager.getLogger().warn("This app is out of date. Please update to the new version by visiting");
+                LoggerManager.getLogger().warn("https://github.com/angelolz1/CookieClickerRPC/releases");
+                LoggerManager.getLogger().warn("--------------------------------------------");
+                outdatedVersionWarned = true;
+            }
+
+            PresenceManager.updateRichPresence(c);
+
+            if(overlayWebSocket != null)
+                overlayWebSocket.send(text);
         }
 
-        PresenceManager.updateRichPresence(c);
-
-        if(overlayWebSocket != null)
-            overlayWebSocket.send(text);
+        catch(JsonSyntaxException e) {
+            if(!jsonParseErrorWarned) {
+                jsonParseErrorWarned = true;
+                LoggerManager.getLogger().error("There was an error updating your status, please report this to the developer: {}", e.getMessage());
+            }
+        }
     }
 
     @Override
-    public void onMessage( WebSocket conn, ByteBuffer message ) { /* ignored */ }
+    public void onMessage(WebSocket conn, ByteBuffer message) { /* ignored */ }
 
     @Override
     public void onError(WebSocket conn, Exception ex)

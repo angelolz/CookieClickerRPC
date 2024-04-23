@@ -333,7 +333,7 @@ function sendData()
 			"goldenCookiesMissed":"${DRP.nFormat(Game.missedGoldenClicks)}",
 			"config": {
 				"showElapsedTime": ${DRP.config.SHOW_ELAPSED_TIME},
-				"smallIconMode": ${DRP.config.SMALL_ICON_MODE},
+				"smallIconMode": ${DRP.config.SMALL_ICON_MODE}
 			}
 		}`);
 }
