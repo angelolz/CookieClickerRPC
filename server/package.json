@@ -1,0 +1,24 @@
+{
+  "name": "cookie-clicker-rpc",
+  "version": "2.0.0",
+  "description": "Cookie Clicker mod that enables Rich Presence for Discord.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angelolz/CookieClickerRPC.git"
+  },
+  "author": "angelolz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angelolz/CookieClickerRPC/issues"
+  },
+  "homepage": "https://github.com/angelolz/CookieClickerRPC#readme",
+  "dependencies": {
+    "@ryuziii/discord-rpc": "^1.0.1-rc.1",
+    "ws": "^8.18.3"
+  }
+}
