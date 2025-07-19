@@ -7,44 +7,48 @@ let outdatedVersionWarned = false;
 let jsonParseErrorWarned = false;
 
 export function startWebSocketServer() {
-  const server = new WebSocketServer({ port: 6969 });
+    const server = new WebSocketServer({ port: 6969 });
 
-  server.on('connection', (ws) => {
-    console.log('Opened a connection with Cookie Clicker.');
-    resetStartTime();
+    server.on('connection', (ws) => {
+        console.log('Opened a connection with Cookie Clicker.');
+        resetStartTime();
 
-    ws.on('message', (data) => {
-      try {
-        const res = JSON.parse(data.toString());
-        console.log("valid json");
+        ws.on('message', (data) => {
+            try {
+                const res = JSON.parse(data.toString());
 
-        if (!outdatedVersionWarned && res.version === `v${VERSION}`) {
-          console.log("--------------------------------------------");
-          console.log("This app is out of date. Please update:");
-          console.log("https://github.com/angelolz1/CookieClickerRPC/releases");
-          console.log("--------------------------------------------");
-          outdatedVersionWarned = true;
-        }
+                if (!outdatedVersionWarned && res.version !== `v${VERSION}`) {
+                    console.log('!------------------------------------------!');
+                    console.log(
+                        `This app is out of date. Current: v${VERSION} | Latest: ${res.version}`
+                    );
+                    console.log(
+                        'Please update here: https://github.com/angelolz1/CookieClickerRPC/releases'
+                    );
+                    console.log('!------------------------------------------!');
+                    outdatedVersionWarned = true;
+                }
 
-        updatePresence(res);
+                updatePresence(res);
+            } catch (err) {
+                if (!jsonParseErrorWarned) {
+                    console.error('Failed to parse JSON:', err);
+                    console.log('Raw message:', data.toString());
+                    jsonParseErrorWarned = true;
+                }
+            }
+        });
 
-      } catch (err) {
-        if (!jsonParseErrorWarned) {
-          console.error('Failed to parse JSON:', err);
-          console.log('Raw message:', data.toString());
-          jsonParseErrorWarned = true;
-        }
-      }
+        ws.on('close', () => {
+            console.log(
+                'Closed connection with Cookie Clicker and stopped Rich Presence status.'
+            );
+            resetStartTime();
+            clearActivity();
+        });
+
+        ws.on('error', (err) => {
+            console.error('WebSocket error:', err);
+        });
     });
-
-    ws.on('close', () => {
-      console.log("Closed connection with Cookie Clicker and stopped Rich Presence status.");
-      resetStartTime();
-      clearActivity();
-    });
-
-    ws.on('error', (err) => {
-      console.error('WebSocket error:', err);
-    });
-  });
 }

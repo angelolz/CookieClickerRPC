@@ -27,3 +27,4 @@ build.xml
 hs_err_pid*
 **/node_modules/
 **/dist/
+**/config.json
