@@ -5,7 +5,7 @@ import { exec } from 'child_process';
 
 async function main() {
     const version = await askCookieClickerVersion();
-    console.log(`Using the ${version} version of Cookie Clicker.`);
+    console.log(`[INFO] Using the ${version} version of Cookie Clicker.`);
     openCookieClickerVersion(version);
     login();
     startWebSocketServer();

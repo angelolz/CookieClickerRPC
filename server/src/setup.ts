@@ -29,7 +29,7 @@ function askYesNo(question: string): Promise<boolean> {
 export async function askCookieClickerVersion(): Promise<string> {
     const saved = getSavedVersion();
     if (saved) {
-        console.log(`Detected previously selected version: ${saved}`);
+        console.log(`[INFO] Detected previously selected version: ${saved}`);
         return saved;
     }
 
@@ -38,7 +38,7 @@ export async function askCookieClickerVersion(): Promise<string> {
     );
     const version = isSteam ? 'steam' : 'web';
 
-    console.log(`Saving preference: ${version}`);
+    console.log(`[INFO] Saving preference: ${version}`);
     saveVersion(version);
     return version;
 }

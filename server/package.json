@@ -9,7 +9,7 @@
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
     "format": "prettier --write \"src/**/*.ts\"",
-    "package": "npm run build && pkg . --out-path build && npx rcedit build/cookie-clicker-rpc-win.exe --set-icon ../img/icon.ico"
+    "package": "npm run build && pkg ."
   },
   "repository": {
     "type": "git",

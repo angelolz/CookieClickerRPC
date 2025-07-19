@@ -10,7 +10,7 @@ export function startWebSocketServer() {
     const server = new WebSocketServer({ port: 6969 });
 
     server.on('connection', (ws) => {
-        console.log('Opened a connection with Cookie Clicker.');
+        console.log('[INFO] Opened a connection with Cookie Clicker.');
         resetStartTime();
 
         ws.on('message', (data) => {
@@ -18,14 +18,18 @@ export function startWebSocketServer() {
                 const res = JSON.parse(data.toString());
 
                 if (!outdatedVersionWarned && res.version !== `v${VERSION}`) {
-                    console.log('!------------------------------------------!');
                     console.log(
-                        `This app is out of date. Current: v${VERSION} | Latest: ${res.version}`
+                        '[WARN] !------------------------------------------!'
                     );
                     console.log(
-                        'Please update here: https://github.com/angelolz1/CookieClickerRPC/releases'
+                        `[WARN] This app is out of date. Current: v${VERSION} | Latest: ${res.version}`
                     );
-                    console.log('!------------------------------------------!');
+                    console.log(
+                        '[WARN] Please update here: https://github.com/angelolz1/CookieClickerRPC/releases'
+                    );
+                    console.log(
+                        '[WARN] !------------------------------------------!'
+                    );
                     outdatedVersionWarned = true;
                 }
 
@@ -44,7 +48,7 @@ export function startWebSocketServer() {
 
         ws.on('close', () => {
             console.log(
-                'Closed connection with Cookie Clicker and stopped Rich Presence status.'
+                '[INFO] Closed connection with Cookie Clicker and stopped Rich Presence status.'
             );
             outdatedVersionWarned = false;
             jsonParseErrorWarned = false;

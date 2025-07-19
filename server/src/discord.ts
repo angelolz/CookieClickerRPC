@@ -5,18 +5,19 @@ export const client = new Client({ clientId: '895895624891895828' });
 let startTime: number;
 
 client.on('ready', () => {
+    console.log('[INFO] Started Discord Rich Presence instance.');
     console.log(
-        'Started Discord Rich Presence instance. Your Rich Presence will show once the Cookie Clicker mod is loaded.'
+        '[INFO] Your Rich Presence will show once the Cookie Clicker mod is loaded.'
     );
     startTime = Date.now();
 });
 
 client.on('disconnected', () => {
-    console.log('Disconnected from Discord');
+    console.log('[WARN] Disconnected from Discord');
 });
 
 client.on('error', (err) => {
-    console.error('Error:', err);
+    console.error('[ERROR] Error:', err);
 });
 
 export function getStartTime(): number {

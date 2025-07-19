@@ -31,5 +31,5 @@ export function getSavedVersion(): string | null {
 
 export function saveVersion(version: string) {
     fs.writeFileSync(configPath, JSON.stringify({ version }, null, 2), 'utf-8');
-    console.log('Saved settings to: ', configPath);
+    console.log('[INFO] Saved settings to: ', configPath);
 }
