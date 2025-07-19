@@ -18,7 +18,7 @@ This Cookie Clicker mod allows you to share your game stats with everyone on Dis
 3. Unzip it and run the `.exe` if on Windows, or run the executable through a terminal if on Mac/Linux.
 
 4. If everything was installed correctly, you should see the below output and your rich presence on Discord!
-   ![It's working! :D](https://i.imgur.com/JAIsMk4.png)
+   ![It's working! :D](https://i.imgur.com/LLzdgnR.png)
 
 # Bugs/Feedback
 
