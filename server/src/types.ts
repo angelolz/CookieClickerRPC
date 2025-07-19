@@ -38,5 +38,6 @@ export interface CookieData {
     drops: string;
     config: {
         smallIconMode: number;
+        cycle: boolean;
     };
 }

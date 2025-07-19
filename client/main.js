@@ -18,9 +18,7 @@ DRP.launch = function () {
     DRP.defaultConfig = {
         PRESTIGE_LONG_SCALE: 1,
         COOKIES_LONG_SCALE: 0,
-        SHOW_ELAPSED_TIME: 1,
-        SMALL_ICON_MODE: 2,
-        SHOW_GUIDE: 1,
+        SMALL_ICON_MODE: 5
     };
 
     //initialize config
@@ -44,22 +42,6 @@ DRP.launch = function () {
         });
 
         DRP.config = settings;
-
-        if (
-            DRP.config.SHOW_GUIDE === 1 &&
-            !notified &&
-            typeof Steam == 'object'
-        ) {
-            Game.Notify(
-                'DRP+ has been updated!',
-                `Please <a href='https://steamcommunity.com/sharedfiles/filedetails/?id=2633184601' " +
-\t\t"target='_blank'>read the guide</a> to enable rich presence. Disable this notice in the settings.`,
-                [5, 5],
-                0,
-                true
-            );
-            notified = true;
-        }
     };
 
     DRP.init = function () {
@@ -81,7 +63,7 @@ DRP.launch = function () {
         str =
             '<div class="listing">' +
             m.ActionButton(
-                'DRP.config.SMALL_ICON_MODE == 5 ? DRP.config.SMALL_ICON_MODE = 0 : DRP.config.SMALL_ICON_MODE++; Game.UpdateMenu();',
+                'DRP.config.SMALL_ICON_MODE == 6 ? DRP.config.SMALL_ICON_MODE = 0 : DRP.config.SMALL_ICON_MODE++; Game.UpdateMenu();',
                 DRP.smallIconSettingText(DRP.config.SMALL_ICON_MODE)
             ) +
             '<label>Toggle what information is displayed for the small icon of your Rich Presence.</label><br>' +
@@ -103,20 +85,6 @@ DRP.launch = function () {
                 'DRP.toggle'
             ) +
             '<label>Change the scale setting for the Total Cookies and CPS.</label><br>';
-
-        if (typeof Steam == 'object') {
-            str +=
-                '<br>' +
-                m.ToggleButton(
-                    DRP.config,
-                    'SHOW_GUIDE',
-                    'RPC_SHOW_GUIDE',
-                    'Show Steam Guide ON',
-                    'Show Steam Guide OFF',
-                    'DRP.toggle'
-                ) +
-                '<label>Display the link to the Steam guide when the game is launched </label>';
-        }
 
         str += '</div>';
 
@@ -140,7 +108,7 @@ DRP.launch = function () {
     DRP.setupWebSocket = function () {
         DRP.ws = new WebSocket('ws://localhost:6969/');
 
-        DRP.ws.onopen = function (event) {
+        DRP.ws.onopen = function () {
             console.log('[rich presence] established connection to websocket!');
             DRP.wsCon = true;
             Game.registerHook('check', sendData);
@@ -153,13 +121,13 @@ DRP.launch = function () {
             );
         };
 
-        DRP.ws.onclose = function (event) {
+        DRP.ws.onclose = function () {
             if (DRP.wsCon) {
                 lostConnection();
             }
         };
 
-        DRP.ws.onerror = function (event) {
+        DRP.ws.onerror = function () {
             Game.Notify(
                 "Couldn't connect to Rich Presence Server!",
                 'Please check if the app is open.',
@@ -257,22 +225,13 @@ DRP.launch = function () {
     DRP.getDrops = function (season) {
         switch (season) {
             case 'halloween':
-                return `${Game.GetHowManyHalloweenDrops()}/${
-                    Game.halloweenDrops.length
-                } cookies`;
+                return `${Game.GetHowManyHalloweenDrops()}/${Game.halloweenDrops.length} cookies`;
             case 'christmas':
-                return `${Game.GetHowManySantaDrops()}/${
-                    Game.santaDrops.length
-                } gifts
-				and ${Game.GetHowManyReindeerDrops()}/${Game.reindeerDrops.length} cookies`;
+                return `${Game.GetHowManySantaDrops()}/${Game.santaDrops.length} gifts and ${Game.GetHowManyReindeerDrops()}/${Game.reindeerDrops.length} cookies`;
             case 'valentines':
-                return `${Game.GetHowManyHeartDrops()}/${
-                    Game.heartDrops.length
-                } biscuits`;
+                return `${Game.GetHowManyHeartDrops()}/${Game.heartDrops.length} biscuits`;
             case 'easter':
-                return `${Game.GetHowManyEggs()}/${
-                    Game.easterEggs.length
-                } eggs`;
+                return `${Game.GetHowManyEggs()}/${Game.easterEggs.length} eggs`;
             case 'fools':
                 //fools doesn't have any drops
                 return 'Business. Serious Business.';
@@ -326,6 +285,8 @@ DRP.launch = function () {
             case 4:
                 return 'Show Current Season Info';
             case 5:
+                return 'Cycle Through All Info';
+            case 6:
                 return "Don't Show Any Info";
         }
     };
@@ -366,8 +327,8 @@ function sendData() {
 			"goldenCookiesClicked":"${DRP.nFormat(Game.goldenClicks)}",
 			"goldenCookiesMissed":"${DRP.nFormat(Game.missedGoldenClicks)}",
 			"config": {
-				"showElapsedTime": ${DRP.config.SHOW_ELAPSED_TIME},
-				"smallIconMode": ${DRP.config.SMALL_ICON_MODE}
+				"smallIconMode": ${DRP.config.SMALL_ICON_MODE},
+                "cycle": ${DRP.config.SMALL_ICON_MODE == 5}
 			}
 		}`
     );

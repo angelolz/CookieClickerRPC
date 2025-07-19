@@ -1,7 +1,7 @@
 import { login } from './discord';
 import { startWebSocketServer } from './websocket';
 import { askCookieClickerVersion } from './setup';
-import open from 'open';
+import { exec } from 'child_process';
 
 async function main() {
     const version = await askCookieClickerVersion();
@@ -12,10 +12,16 @@ async function main() {
 }
 
 function openCookieClickerVersion(version: string): void {
+    const command =
+        process.platform === 'win32'
+            ? 'start'
+            : process.platform === 'darwin'
+              ? 'open'
+              : 'xdg-open';
     if (version === 'steam') {
-        open('steam://launch/1454400');
+        exec(`${command} steam://launch/1454400`);
     } else {
-        open('https://orteil.dashnet.org/cookieclicker/');
+        exec(`${command} https://orteil.dashnet.org/cookieclicker/`);
     }
 }
 

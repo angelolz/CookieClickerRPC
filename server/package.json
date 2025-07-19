@@ -2,11 +2,14 @@
   "name": "cookie-clicker-rpc",
   "version": "2.0.0",
   "description": "Cookie Clicker mod that enables Rich Presence for Discord.",
-  "main": "index.js",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "bin": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && node dist/index.js",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "package": "npm run build && pkg . --out-path build && npx rcedit build/cookie-clicker-rpc-win.exe --set-icon ../img/icon.ico"
   },
   "repository": {
     "type": "git",
@@ -20,12 +23,21 @@
   "homepage": "https://github.com/angelolz/CookieClickerRPC#readme",
   "dependencies": {
     "minimal-discord-rpc": "^1.0.4",
-    "open": "^10.2.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {
     "@types/ws": "^8.18.1",
+    "pkg": "^5.8.1",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3"
+  },
+  "pkg": {
+    "scripts": "dist",
+    "targets": [
+      "node18-win-x64",
+      "node18-linux-x64",
+      "node18-macos-x64"
+    ],
+    "outputPath": "build"
   }
 }

@@ -32,8 +32,11 @@ export function startWebSocketServer() {
                 updatePresence(res);
             } catch (err) {
                 if (!jsonParseErrorWarned) {
-                    console.error('Failed to parse JSON:', err);
-                    console.log('Raw message:', data.toString());
+                    console.error(
+                        '!!!!! ERROR: Failed to process message. Please report the following error to the developer: !!!!!\n',
+                        err
+                    );
+                    console.log('\nRaw message:', data.toString());
                     jsonParseErrorWarned = true;
                 }
             }
@@ -43,6 +46,8 @@ export function startWebSocketServer() {
             console.log(
                 'Closed connection with Cookie Clicker and stopped Rich Presence status.'
             );
+            outdatedVersionWarned = false;
+            jsonParseErrorWarned = false;
             resetStartTime();
             clearActivity();
         });

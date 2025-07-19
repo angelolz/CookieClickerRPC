@@ -1,9 +1,12 @@
 import { ActivityType } from 'minimal-discord-rpc';
 import { setActivity, getStartTime } from './discord';
-import { CookieData } from './types';
+import { Activity, CookieData } from './types';
+
+let currentCycleMode = 0;
+let cycleTask: any = null;
 
 export function updatePresence(cookieData: CookieData) {
-    const activity: any = {
+    const activity: Activity = {
         type: ActivityType.Playing,
         details: `${cookieData.cookies} cookies`,
         state: `${cookieData.cookiesPerSecond} per second`,
@@ -16,7 +19,23 @@ export function updatePresence(cookieData: CookieData) {
         },
     };
 
-    switch (cookieData.config.smallIconMode) {
+    let currentMode;
+    if (cookieData.config.cycle) {
+        currentMode = currentCycleMode;
+
+        if (!cycleTask) {
+            cycleTask = setInterval(() => incrementMode(), 10000);
+        }
+    } else {
+        currentMode = cookieData.config.smallIconMode;
+
+        if (cycleTask) {
+            clearInterval(cycleTask);
+            cycleTask = null;
+        }
+    }
+
+    switch (currentMode) {
         case 0:
             activity.assets.small_image = 'legacy';
             activity.assets.small_text = `Prestige Lv. ${cookieData.prestigeLevel} with ${cookieData.resets} ascends`;
@@ -49,4 +68,8 @@ export function updatePresence(cookieData: CookieData) {
     }
 
     setActivity(activity);
+}
+
+function incrementMode() {
+    currentCycleMode = (currentCycleMode + 1) % 5;
 }
