@@ -2,11 +2,10 @@
 	"Name": "Discord Rich Presence",
 	"ID": "angelolz.drp",
 	"Author": "angelolz",
-	"ModVersion": 4,
+	"ModVersion": 5,
 	"Description": "Show your personal stats from Cookie Clicker in Discord!",
-	"GameVersion": 2.052,
-	"Date": "April/21/2024",
+	"GameVersion": 2.053,
+	"Date": "July/18/2025",
 	"Dependencies": ["CCSE"],
-	"Disabled": 1,
 	"AllowSteamAchievs": 1
 }

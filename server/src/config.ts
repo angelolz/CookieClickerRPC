@@ -3,15 +3,13 @@ import path from 'path';
 
 const configPath = path.join(__dirname, '../config.json');
 
-export function getSavedVersion(): 'steam' | 'web' | null {
+export function getSavedVersion(): string | null {
     if (!fs.existsSync(configPath)) return null;
 
     try {
         const raw = fs.readFileSync(configPath, 'utf-8');
         const parsed = JSON.parse(raw);
-        if (parsed.version === 'steam' || parsed.version === 'web') {
-            return parsed.version;
-        }
+        return parsed.version;
     } catch (err) {
         console.error('Error reading config:', err);
     }
@@ -19,6 +17,6 @@ export function getSavedVersion(): 'steam' | 'web' | null {
     return null;
 }
 
-export function saveVersion(version: 'steam' | 'web') {
+export function saveVersion(version: string) {
     fs.writeFileSync(configPath, JSON.stringify({ version }, null, 2), 'utf-8');
 }
