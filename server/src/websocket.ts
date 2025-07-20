@@ -1,13 +1,13 @@
 import { WebSocketServer } from 'ws';
 import { client, clearActivity, resetStartTime } from './discord';
 import { updatePresence } from './presence';
-import { VERSION } from './constants';
+import { PORT, VERSION } from './constants';
 
 let outdatedVersionWarned = false;
 let jsonParseErrorWarned = false;
 
 export function startWebSocketServer() {
-    const server = new WebSocketServer({ port: 6969 });
+    const server = new WebSocketServer({ port: PORT });
 
     server.on('connection', (ws) => {
         console.log('[INFO] Opened a connection with Cookie Clicker.');

@@ -1,6 +1,7 @@
 import { Client } from 'minimal-discord-rpc';
+import { CLIENT_ID } from './constants';
 
-export const client = new Client({ clientId: '895895624891895828' });
+export const client = new Client({ clientId: CLIENT_ID });
 
 let startTime: number;
 

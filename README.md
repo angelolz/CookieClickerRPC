@@ -20,6 +20,13 @@ This Cookie Clicker mod allows you to share your game stats with everyone on Dis
 4. If everything was installed correctly, you should see the below output and your rich presence on Discord!
    ![It's working! :D](https://i.imgur.com/LLzdgnR.png)
 
+### Building
+
+1. Use `npm install` to install all required dependencies.
+2. Run `npm run start` to start a development build of the app.
+    - You may want to change the clientId to yours in `server/constants.ts`.
+3. Run `npm run package` if you want to create an executable for Windows/Mac/Linux.
+
 # Bugs/Feedback
 
 If the app shows an error, and you can't figure out how to fix it,
@@ -27,7 +34,7 @@ please [open an issue](https://github.com/angelolz1/CookieClickerRPC/issues).
 
 # Dependencies Used:
 
--   [ItsPi3141/minimal-discord-rpc ](https://github.com/itspi3141/minimal-discord-rpc) for the Javascript implementation of Rich Presence
+-   [ItsPi3141/minimal-discord-rpc](https://github.com/itspi3141/minimal-discord-rpc) for the Javascript implementation of Rich Presence
 -   [websockets/ws](https://github.com/websockets/ws) for the websocket server
 -   [vercel/pkg](https://github.com/vercel/pkg) for creating executables
 -   [qos-ch/logback](https://github.com/qos-ch/logback) for logging (using logback-classic)
